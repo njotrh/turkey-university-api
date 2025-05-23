@@ -33,7 +33,8 @@ export function usePagination<T>(
   }, [data.length, totalItems]);
 
   // Calculate total pages
-  const totalPages = Math.max(1, Math.ceil(data.length / itemsPerPage));
+  const dataLength = Array.isArray(data) ? data.length : 0;
+  const totalPages = Math.max(1, Math.ceil(dataLength / itemsPerPage));
 
   // Ensure current page is within bounds
   useEffect(() => {
@@ -44,7 +45,9 @@ export function usePagination<T>(
 
   // Get paginated data
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = data.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedData = Array.isArray(data)
+    ? data.slice(startIndex, startIndex + itemsPerPage)
+    : [];
 
   // Navigation functions
   const goToNextPage = () => {

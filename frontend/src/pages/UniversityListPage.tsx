@@ -6,6 +6,7 @@ import SearchBar from "../components/SearchBar";
 import FilterSection from "../components/FilterSection";
 import UniversityList from "../components/UniversityList";
 import Pagination from "../components/Pagination";
+import ExportButton from "../components/ExportButton";
 import { usePagination } from "../hooks/usePagination";
 
 const UniversityListPage = () => {
@@ -149,7 +150,14 @@ const UniversityListPage = () => {
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Üniversiteler</h1>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+          <h1 className="text-3xl font-bold text-gray-900">Üniversiteler</h1>
+          <ExportButton
+            data={filteredUniversities}
+            filename="turkiye-universiteleri"
+            label="Listeyi Dışa Aktar"
+          />
+        </div>
         <SearchBar
           onSearch={handleSearch}
           placeholder="Üniversite adı veya şehir ara..."

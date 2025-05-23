@@ -70,12 +70,14 @@ const SearchResultsPage = () => {
   const searchSuggestions = useMemo(() => {
     if (searchType === "faculty") {
       // Extract faculty names from results
+      if (!Array.isArray(facultyResults)) return [];
       const suggestions = facultyResults.flatMap((result) =>
         result.faculties.map((faculty) => faculty.name)
       );
       return Array.from(new Set(suggestions)).sort();
     } else {
       // Extract program names from results
+      if (!Array.isArray(programResults)) return [];
       const suggestions = programResults.flatMap((result) =>
         result.faculties.flatMap((faculty) =>
           faculty.programs.map((program) => program.name)
@@ -91,30 +93,34 @@ const SearchResultsPage = () => {
       // Create a mapping of faculty names to university IDs
       const data: Array<{ name: string; id: number }> = [];
 
-      facultyResults.forEach((university) => {
-        university.faculties.forEach((faculty) => {
-          data.push({
-            name: faculty.name,
-            id: university.id,
+      if (Array.isArray(facultyResults)) {
+        facultyResults.forEach((university) => {
+          university.faculties.forEach((faculty) => {
+            data.push({
+              name: faculty.name,
+              id: university.id,
+            });
           });
         });
-      });
+      }
 
       return data;
     } else {
       // Create a mapping of program names to university IDs
       const data: Array<{ name: string; id: number }> = [];
 
-      programResults.forEach((university) => {
-        university.faculties.forEach((faculty) => {
-          faculty.programs.forEach((program) => {
-            data.push({
-              name: program.name,
-              id: university.id,
+      if (Array.isArray(programResults)) {
+        programResults.forEach((university) => {
+          university.faculties.forEach((faculty) => {
+            faculty.programs.forEach((program) => {
+              data.push({
+                name: program.name,
+                id: university.id,
+              });
             });
           });
         });
-      });
+      }
 
       return data;
     }
@@ -180,7 +186,10 @@ const SearchResultsPage = () => {
   );
 
   const renderFacultyResults = () => {
-    if (facultyResults.length === 0 && !loading && searchQuery) {
+    if (
+      !Array.isArray(facultyResults) ||
+      (facultyResults.length === 0 && !loading && searchQuery)
+    ) {
       return (
         <div
           className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative"
@@ -242,19 +251,24 @@ const SearchResultsPage = () => {
           </div>
         ))}
 
-        {facultyResults.length > 0 && facultyTotalPages > 1 && (
-          <Pagination
-            currentPage={facultyPage}
-            totalPages={facultyTotalPages}
-            onPageChange={setFacultyPage}
-          />
-        )}
+        {Array.isArray(facultyResults) &&
+          facultyResults.length > 0 &&
+          facultyTotalPages > 1 && (
+            <Pagination
+              currentPage={facultyPage}
+              totalPages={facultyTotalPages}
+              onPageChange={setFacultyPage}
+            />
+          )}
       </div>
     );
   };
 
   const renderProgramResults = () => {
-    if (programResults.length === 0 && !loading && searchQuery) {
+    if (
+      !Array.isArray(programResults) ||
+      (programResults.length === 0 && !loading && searchQuery)
+    ) {
       return (
         <div
           className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative"
@@ -321,13 +335,15 @@ const SearchResultsPage = () => {
           </div>
         ))}
 
-        {programResults.length > 0 && programTotalPages > 1 && (
-          <Pagination
-            currentPage={programPage}
-            totalPages={programTotalPages}
-            onPageChange={setProgramPage}
-          />
-        )}
+        {Array.isArray(programResults) &&
+          programResults.length > 0 &&
+          programTotalPages > 1 && (
+            <Pagination
+              currentPage={programPage}
+              totalPages={programTotalPages}
+              onPageChange={setProgramPage}
+            />
+          )}
       </div>
     );
   };

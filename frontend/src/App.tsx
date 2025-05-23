@@ -1,10 +1,12 @@
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ComparisonPanel from "./components/ComparisonPanel";
 import HomePage from "./pages/HomePage";
 import UniversityListPage from "./pages/UniversityListPage";
 import UniversityDetailPage from "./pages/UniversityDetailPage";
 import SearchResultsPage from "./pages/SearchResultsPage";
+import FavoritesPage from "./pages/FavoritesPage";
 
 function App() {
   return (
@@ -16,9 +18,13 @@ function App() {
           <Route path="/universities" element={<UniversityListPage />} />
           <Route path="/universities/:id" element={<UniversityDetailPage />} />
           <Route path="/search" element={<SearchResultsPage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
         </Routes>
       </main>
       <Footer />
+
+      {/* Floating Comparison Panel */}
+      <ComparisonPanel />
     </div>
   );
 }

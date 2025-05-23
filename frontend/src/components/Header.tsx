@@ -4,10 +4,13 @@ import {
   AcademicCapIcon,
   Bars3Icon,
   XMarkIcon,
+  HeartIcon,
 } from "@heroicons/react/24/outline";
+import { useFavorites } from "../hooks/useFavorites";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { getFavoritesCount } = useFavorites();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -43,6 +46,20 @@ const Header = () => {
                 className="hover:text-blue-200 transition-colors"
               >
                 Arama
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/favorites"
+                className="hover:text-blue-200 transition-colors flex items-center gap-1"
+              >
+                <HeartIcon className="w-4 h-4" />
+                Favoriler
+                {getFavoritesCount() > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 min-w-[1.25rem] text-center">
+                    {getFavoritesCount()}
+                  </span>
+                )}
               </Link>
             </li>
           </ul>
@@ -92,6 +109,21 @@ const Header = () => {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Arama
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/favorites"
+                  className="flex items-center gap-1 py-2 hover:text-blue-200 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <HeartIcon className="w-4 h-4" />
+                  Favoriler
+                  {getFavoritesCount() > 0 && (
+                    <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 min-w-[1.25rem] text-center">
+                      {getFavoritesCount()}
+                    </span>
+                  )}
                 </Link>
               </li>
             </ul>

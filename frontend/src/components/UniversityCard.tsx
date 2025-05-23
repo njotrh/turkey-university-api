@@ -5,6 +5,8 @@ import {
   MapPinIcon,
   BuildingLibraryIcon,
 } from "@heroicons/react/24/outline";
+import FavoriteButton from "./FavoriteButton";
+import ComparisonButton from "./ComparisonButton";
 
 interface UniversityCardProps {
   university: University;
@@ -26,7 +28,7 @@ const UniversityCard = ({ university }: UniversityCardProps) => {
               <BuildingLibraryIcon className="w-7 h-7 sm:w-8 sm:h-8 text-gray-500" />
             </div>
           )}
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
               {university.name}
             </h3>
@@ -34,6 +36,12 @@ const UniversityCard = ({ university }: UniversityCardProps) => {
               <MapPinIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 flex-shrink-0" />
               <span className="truncate">{university.city}</span>
             </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-start gap-1 ml-2">
+            <FavoriteButton university={university} size="sm" />
+            <ComparisonButton university={university} size="sm" />
           </div>
         </div>
 
