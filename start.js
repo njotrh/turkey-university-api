@@ -130,6 +130,9 @@ function startServers() {
     `${colors.cyan}Backend: ${colors.bright}http://localhost:3000${colors.reset}`
   );
   console.log(
+    `${colors.cyan}Health Check: ${colors.bright}http://localhost:3000/health${colors.reset}`
+  );
+  console.log(
     `${colors.magenta}Frontend: ${colors.bright}http://localhost:5173${colors.reset}`
   );
 

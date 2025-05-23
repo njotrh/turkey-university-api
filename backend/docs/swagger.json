@@ -2,8 +2,8 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Türkiye Üniversiteleri API",
-    "description": "Türkiye'deki üniversiteler hakkında fakülteleri ve programları da dahil olmak üzere kapsamlı bilgi sağlayan RESTful API servisi.",
-    "version": "1.0.0",
+    "description": "Türkiye'deki üniversiteler hakkında fakülteleri ve programları da dahil olmak üzere kapsamlı bilgi sağlayan RESTful API servisi. v1.1.0 ile caching, rate limiting, compression ve gelişmiş hata yönetimi eklendi.",
+    "version": "1.1.0",
     "contact": {
       "name": "API Desteği"
     }
@@ -15,6 +15,10 @@
     }
   ],
   "tags": [
+    {
+      "name": "Sistem",
+      "description": "Sistem durumu ve genel API bilgileri"
+    },
     {
       "name": "Üniversiteler",
       "description": "Üniversite bilgilerine erişim"
@@ -29,7 +33,7 @@
       "get": {
         "summary": "API Bilgisi",
         "description": "API hakkında genel bilgi ve kullanılabilir endpoint'ler",
-        "tags": ["Genel"],
+        "tags": ["Sistem"],
         "responses": {
           "200": {
             "description": "Başarılı",
@@ -68,6 +72,66 @@
                         "/api/search/program": {
                           "type": "string",
                           "example": "Program adına göre arama yapar (query: name)"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Sistem Durumu",
+        "description": "Sistem durumu, performans metrikleri ve cache bilgilerini döndürür",
+        "tags": ["Sistem"],
+        "responses": {
+          "200": {
+            "description": "Başarılı",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "healthy"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "format": "date-time",
+                      "example": "2024-01-15T10:30:00.000Z"
+                    },
+                    "uptime": {
+                      "type": "number",
+                      "example": 3600.5,
+                      "description": "Sunucu çalışma süresi (saniye)"
+                    },
+                    "cache": {
+                      "type": "object",
+                      "properties": {
+                        "size": {
+                          "type": "integer",
+                          "example": 25,
+                          "description": "Cache'deki öğe sayısı"
+                        }
+                      }
+                    },
+                    "memory": {
+                      "type": "object",
+                      "properties": {
+                        "used": {
+                          "type": "integer",
+                          "example": 45,
+                          "description": "Kullanılan bellek (MB)"
+                        },
+                        "total": {
+                          "type": "integer",
+                          "example": 128,
+                          "description": "Toplam bellek (MB)"
                         }
                       }
                     }

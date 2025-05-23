@@ -30,6 +30,7 @@ API varsayılan olarak `http://localhost:3000` adresinde çalışacaktır.
 | Uç Nokta                       | Metot | Açıklama                                           |
 | ------------------------------ | ----- | -------------------------------------------------- |
 | `/`                            | GET   | API bilgisi ve kullanılabilir uç noktalar          |
+| `/health`                      | GET   | Sistem durumu ve performans metrikleri             |
 | `/api/universities`            | GET   | Tüm üniversiteleri listele                         |
 | `/api/universities/:id`        | GET   | ID ile üniversite bilgisi getir                    |
 | `/api/universities/city/:city` | GET   | Üniversiteleri şehre göre filtrele                 |

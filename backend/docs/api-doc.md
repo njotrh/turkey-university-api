@@ -6,6 +6,25 @@ Bu dokümantasyon, Türkiye Üniversiteleri API'sinin tüm endpoint'lerini, para
 
 Türkiye Üniversiteleri API, Türkiye'deki üniversiteler hakkında kapsamlı bilgi sağlayan RESTful bir API servisidir. Bu API ile üniversiteleri listeleyebilir, filtreleyebilir ve detaylı bilgilerini görüntüleyebilirsiniz.
 
+## Yeni Özellikler (v1.1.0)
+
+- **🚀 In-Memory Caching**: Hızlı yanıt süreleri için otomatik önbellekleme
+- **⚡ Rate Limiting**: API kötüye kullanımını önlemek için istek sınırlaması (100 istek/15 dakika)
+- **🗜️ Gzip Compression**: Daha hızlı veri transferi için sıkıştırma
+- **✅ Input Validation**: Gelişmiş giriş doğrulama ve hata mesajları
+- **📊 Request Logging**: Detaylı istek ve performans logları
+- **💚 Health Check**: Sistem durumu izleme endpoint'i
+- **🛡️ Error Handling**: Kapsamlı hata yönetimi ve kullanıcı dostu mesajlar
+
+## HTTP Headers
+
+API, aşağıdaki özel header'ları döndürür:
+
+- `X-Cache`: Cache durumu (HIT/MISS)
+- `X-RateLimit-Limit`: İzin verilen maksimum istek sayısı
+- `X-RateLimit-Remaining`: Kalan istek sayısı
+- `X-RateLimit-Reset`: Rate limit'in sıfırlanacağı zaman (Unix timestamp)
+
 ## Temel URL
 
 ```
@@ -14,7 +33,31 @@ http://localhost:3000
 
 ## Endpoint'ler
 
-### 1. API Bilgisi
+### 1. Health Check
+
+Sistem durumunu ve performans metriklerini döndürür.
+
+- **URL:** `/health`
+- **Metot:** `GET`
+- **Başarı Yanıtı:**
+  - **Kod:** 200
+  - **İçerik:**
+    ```json
+    {
+      "status": "healthy",
+      "timestamp": "2024-01-15T10:30:00.000Z",
+      "uptime": 3600.5,
+      "cache": {
+        "size": 25
+      },
+      "memory": {
+        "used": 45,
+        "total": 128
+      }
+    }
+    ```
+
+### 2. API Bilgisi
 
 API hakkında genel bilgi ve kullanılabilir endpoint'leri döndürür.
 

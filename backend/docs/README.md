@@ -13,6 +13,7 @@ Bu klasör, Türkiye Üniversiteleri API'sinin dokümantasyonunu içerir.
 Swagger UI, API dokümantasyonunuzu interaktif bir şekilde görüntülemenizi sağlar. Swagger UI'ı kullanmak için:
 
 1. Swagger UI'ı çevrimiçi olarak kullanabilirsiniz:
+
    - [Swagger Editor](https://editor.swagger.io/) sayfasını açın
    - `swagger.json` dosyasının içeriğini editöre yapıştırın
 
@@ -39,60 +40,84 @@ Bu, API'nin tüm endpoint'lerini içeren bir Postman koleksiyonu oluşturacaktı
 
 ### cURL Örnekleri
 
+#### Sistem durumu kontrolü
+
+```bash
+curl -X GET http://localhost:3000/health
+```
+
 #### Tüm üniversiteleri listele
+
 ```bash
 curl -X GET http://localhost:3000/api/universities
 ```
 
 #### ID'ye göre üniversite getir
+
 ```bash
 curl -X GET http://localhost:3000/api/universities/1
 ```
 
 #### Şehre göre üniversiteleri filtrele
+
 ```bash
 curl -X GET http://localhost:3000/api/universities/city/istanbul
 ```
 
 #### Türe göre üniversiteleri filtrele
+
 ```bash
 curl -X GET http://localhost:3000/api/universities/type/devlet
 ```
 
 #### Fakülte ara
+
 ```bash
 curl -X GET "http://localhost:3000/api/search/faculty?name=mühendislik"
 ```
 
 #### Program ara
+
 ```bash
 curl -X GET "http://localhost:3000/api/search/program?name=bilgisayar"
 ```
 
 ### JavaScript Örnekleri
 
-#### Tüm üniversiteleri listele
+#### Sistem durumu kontrolü
+
 ```javascript
-fetch('http://localhost:3000/api/universities')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Hata:', error));
+fetch("http://localhost:3000/health")
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Hata:", error));
+```
+
+#### Tüm üniversiteleri listele
+
+```javascript
+fetch("http://localhost:3000/api/universities")
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Hata:", error));
 ```
 
 #### ID'ye göre üniversite getir
+
 ```javascript
-fetch('http://localhost:3000/api/universities/1')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Hata:', error));
+fetch("http://localhost:3000/api/universities/1")
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Hata:", error));
 ```
 
 #### Şehre göre üniversiteleri filtrele
+
 ```javascript
-fetch('http://localhost:3000/api/universities/city/istanbul')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error('Hata:', error));
+fetch("http://localhost:3000/api/universities/city/istanbul")
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+  .catch((error) => console.error("Hata:", error));
 ```
 
 ## Daha Fazla Bilgi
