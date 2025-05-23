@@ -83,7 +83,7 @@ const ComparisonButton = ({
           <ScaleIcon className={sizeClasses[size]} />
         )}
         {showText && (
-          <span className="text-sm font-medium">
+          <span className="text-sm font-medium hidden sm:inline">
             {isUniversityInComparison ? "Karşılaştırmada" : "Karşılaştır"}
           </span>
         )}

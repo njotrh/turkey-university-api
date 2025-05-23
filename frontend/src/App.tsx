@@ -7,6 +7,7 @@ import UniversityListPage from "./pages/UniversityListPage";
 import UniversityDetailPage from "./pages/UniversityDetailPage";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import FavoritesPage from "./pages/FavoritesPage";
+import ComparisonPage from "./pages/ComparisonPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/universities/:id" element={<UniversityDetailPage />} />
           <Route path="/search" element={<SearchResultsPage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/comparison" element={<ComparisonPage />} />
         </Routes>
       </main>
       <Footer />

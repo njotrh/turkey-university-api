@@ -87,8 +87,8 @@ class MemoryCache {
 // Rate limiter implementation
 class RateLimiter {
   private clients = new Map<string, RateLimitEntry>();
-  private readonly maxRequests = 100; // 100 istek
-  private readonly windowMs = 15 * 60 * 1000; // 15 dakika
+  private readonly maxRequests = 300; // 300 istek
+  private readonly windowMs = 1 * 60 * 1000; // 1 dakika
 
   isAllowed(clientId: string): boolean {
     const now = Date.now();
