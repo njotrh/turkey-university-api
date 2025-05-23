@@ -16,7 +16,7 @@ Proje, Türkiye'deki üniversiteler, fakülteler ve programlar hakkında bilgi s
 ### Backend İyileştirmeleri:
 
 - **🚀 In-Memory Caching**: Hızlı yanıt süreleri için otomatik önbellekleme sistemi
-- **⚡ Rate Limiting**: API güvenliği için istek sınırlaması (100 istek/15 dakika)
+- **⚡ Rate Limiting**: API güvenliği için istek sınırlaması
 - **🗜️ Gzip Compression**: %70'e varan veri sıkıştırması ile hızlı transfer
 - **✅ Input Validation**: Kapsamlı giriş doğrulama ve hata yönetimi
 - **📊 Request Logging**: Detaylı performans ve kullanım logları
