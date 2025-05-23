@@ -306,7 +306,10 @@ app.use("/docs", express.static(path.join(__dirname, "docs")));
 
 // JSON dosyasını oku
 const universitiesData: University[] = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), "turkey-universities.json"), "utf-8")
+  fs.readFileSync(
+    path.join(process.cwd(), "../data/turkey-universities.json"),
+    "utf-8"
+  )
 );
 
 // Health check endpoint
