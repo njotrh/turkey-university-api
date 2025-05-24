@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getFilterOptions, advancedSearch } from "../services/api";
 import { useFavorites } from "../hooks/useFavorites";
+import { usePagination } from "../hooks/usePagination";
 import {
   FilterOptions,
   AdvancedSearchFilters,
@@ -11,6 +12,7 @@ import ProgramCard from "../components/ProgramCard";
 import ComparisonButton from "../components/ComparisonButton";
 import FavoriteButton from "../components/FavoriteButton";
 import ExportButton from "../components/ExportButton";
+import Pagination from "../components/Pagination";
 import {
   ArrowLeftIcon,
   BuildingLibraryIcon,
@@ -34,6 +36,18 @@ const EnhancedSearchPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showFilters, setShowFilters] = useState(true);
+
+  // Pagination for search results
+  const {
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    paginatedData: paginatedResults,
+  } = usePagination(searchResults?.results || [], {
+    initialPage: 1,
+    itemsPerPage: 10,
+    totalItems: searchResults?.results?.length || 0,
+  });
 
   // Filter states
   const [filters, setFilters] = useState<AdvancedSearchFilters>({
@@ -69,6 +83,8 @@ const EnhancedSearchPage = () => {
       setError("");
       const results = await advancedSearch(filters);
       setSearchResults(results);
+      // Reset pagination to first page when new search is performed
+      setCurrentPage(1);
     } catch (err) {
       console.error("Search error:", err);
       setError("Arama sırasında bir hata oluştu.");
@@ -93,6 +109,8 @@ const EnhancedSearchPage = () => {
       sortOrder: "asc",
     });
     setSearchResults(null);
+    // Reset pagination when filters are cleared
+    setCurrentPage(1);
   };
 
   // Update filter helper
@@ -467,7 +485,16 @@ const EnhancedSearchPage = () => {
       </div>
 
       {/* Search Results */}
-      {searchResults && (
+      {loading && (
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="flex justify-center items-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
+            <span className="ml-3 text-gray-600">Arama yapılıyor...</span>
+          </div>
+        </div>
+      )}
+
+      {searchResults && !loading && (
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="mb-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
@@ -480,17 +507,25 @@ const EnhancedSearchPage = () => {
                     <strong>{searchResults.count}</strong> sonuç bulundu
                   </span>
                   {searchResults.results.length > 0 && (
-                    <span className="flex items-center gap-1">
-                      <HeartIcon className="w-4 h-4 text-red-500" />
-                      <strong>
-                        {
-                          searchResults.results.filter((uni) =>
-                            favorites.some((fav) => fav.id === uni.id)
-                          ).length
-                        }
-                      </strong>
-                      favoride
-                    </span>
+                    <>
+                      <span className="flex items-center gap-1">
+                        <HeartIcon className="w-4 h-4 text-red-500" />
+                        <strong>
+                          {
+                            searchResults.results.filter((uni) =>
+                              favorites.some((fav) => fav.id === uni.id)
+                            ).length
+                          }
+                        </strong>
+                        favoride
+                      </span>
+                      {totalPages > 1 && (
+                        <span>
+                          Sayfa <strong>{currentPage}</strong> /{" "}
+                          <strong>{totalPages}</strong>
+                        </span>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
@@ -515,90 +550,104 @@ const EnhancedSearchPage = () => {
               </p>
             </div>
           ) : (
-            <div className="space-y-6">
-              {searchResults.results.map((university) => (
-                <div
-                  key={university.id}
-                  className="border border-gray-200 rounded-lg p-6"
-                >
-                  {/* University Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {university.name}
-                      </h3>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                        <div className="flex items-center">
-                          <MapPinIcon className="w-4 h-4 mr-1" />
-                          <span>{university.city}</span>
+            <>
+              <div className="space-y-6">
+                {paginatedResults.map((university) => (
+                  <div
+                    key={university.id}
+                    className="border border-gray-200 rounded-lg p-6"
+                  >
+                    {/* University Header */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          {university.name}
+                        </h3>
+                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                          <div className="flex items-center">
+                            <MapPinIcon className="w-4 h-4 mr-1" />
+                            <span>{university.city}</span>
+                          </div>
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              university.type.toLowerCase().includes("devlet")
+                                ? "bg-blue-100 text-blue-800"
+                                : "bg-purple-100 text-purple-800"
+                            }`}
+                          >
+                            {university.type}
+                          </span>
                         </div>
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            university.type.toLowerCase().includes("devlet")
-                              ? "bg-blue-100 text-blue-800"
-                              : "bg-purple-100 text-purple-800"
-                          }`}
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <FavoriteButton
+                          university={{
+                            ...university,
+                            website: "",
+                            address: "",
+                            logo: "",
+                          }}
+                          size="md"
+                          showText={false}
+                        />
+                        <ComparisonButton
+                          university={{
+                            ...university,
+                            website: "",
+                            address: "",
+                            logo: "",
+                          }}
+                        />
+                        <Link
+                          to={`/universities/${university.id}`}
+                          className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                         >
-                          {university.type}
-                        </span>
+                          Detayları Gör
+                        </Link>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <FavoriteButton
-                        university={{
-                          ...university,
-                          website: "",
-                          address: "",
-                          logo: "",
-                        }}
-                        size="md"
-                        showText={false}
-                      />
-                      <ComparisonButton
-                        university={{
-                          ...university,
-                          website: "",
-                          address: "",
-                          logo: "",
-                        }}
-                      />
-                      <Link
-                        to={`/universities/${university.id}`}
-                        className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                      >
-                        Detayları Gör
-                      </Link>
-                    </div>
-                  </div>
 
-                  {/* Faculties and Programs */}
-                  <div className="space-y-4">
-                    {university.faculties.map((faculty) => (
-                      <div
-                        key={faculty.id}
-                        className="bg-gray-50 rounded-lg p-4"
-                      >
-                        <div className="flex items-center mb-3">
-                          <BuildingLibraryIcon className="w-5 h-5 mr-2 text-blue-600" />
-                          <h4 className="font-medium text-gray-900">
-                            {faculty.name}
-                          </h4>
+                    {/* Faculties and Programs */}
+                    <div className="space-y-4">
+                      {university.faculties.map((faculty) => (
+                        <div
+                          key={faculty.id}
+                          className="bg-gray-50 rounded-lg p-4"
+                        >
+                          <div className="flex items-center mb-3">
+                            <BuildingLibraryIcon className="w-5 h-5 mr-2 text-blue-600" />
+                            <h4 className="font-medium text-gray-900">
+                              {faculty.name}
+                            </h4>
+                          </div>
+                          <div className="space-y-3">
+                            {faculty.programs.map((program, index) => (
+                              <ProgramCard
+                                key={index}
+                                program={program}
+                                showEnhancedData={true}
+                              />
+                            ))}
+                          </div>
                         </div>
-                        <div className="space-y-3">
-                          {faculty.programs.map((program, index) => (
-                            <ProgramCard
-                              key={index}
-                              program={program}
-                              showEnhancedData={true}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                    className="justify-center"
+                  />
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </div>
       )}
