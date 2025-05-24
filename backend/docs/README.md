@@ -1,215 +1,362 @@
-# Türkiye Üniversiteleri API Dokümantasyonu (v2.0.0)
+# 📚 Türkiye Üniversiteleri API Dokümantasyonu (v2.0.0)
 
-Bu klasör, Türkiye Üniversiteleri API'sinin dokümantasyonunu içerir. API, YÖK 2024 verilerini entegre eden kapsamlı gelişmiş arama sistemi ile güncellenmiştir.
+[![API Version](https://img.shields.io/badge/API-v2.0.0-brightgreen.svg)](#)
+[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-green.svg)](https://swagger.io/specification/)
+[![Documentation](https://img.shields.io/badge/docs-Swagger%20UI-orange.svg)](http://localhost:3000/docs)
 
-## 🆕 Yeni Özellikler (v2.0.0)
+> **Türkiye Üniversiteleri API'sinin kapsamlı dokümantasyon merkezi**
 
-- **🔍 Gelişmiş Çoklu Kriter Arama**: Üniversite türü, şehir, program türü, puan türü ve fakülte kategorilerine göre filtreleme
+Bu klasör, Türkiye Üniversiteleri API'sinin tüm dokümantasyonunu içerir. API, YÖK 2024 verilerini entegre eden gelişmiş arama sistemi ile güncellenmiştir.
+
+## 📋 İçindekiler
+
+- [🚀 Hızlı Başlangıç](#-hızlı-başlangıç)
+- [✨ Yeni Özellikler](#-yeni-özellikler)
+- [📁 Dokümantasyon Dosyaları](#-dokümantasyon-dosyaları)
+- [🌐 Swagger UI](#-swagger-ui)
+- [🔧 API Test Araçları](#-api-test-araçları)
+- [📝 Kullanım Örnekleri](#-kullanım-örnekleri)
+- [🔗 Harici Araçlar](#-harici-araçlar)
+
+## 🚀 Hızlı Başlangıç
+
+### 📖 Dokümantasyona Erişim
+
+| Yöntem            | URL                                                      | Açıklama                        |
+| ----------------- | -------------------------------------------------------- | ------------------------------- |
+| **🌐 Swagger UI** | [http://localhost:3000/docs](http://localhost:3000/docs) | İnteraktif API dokümantasyonu   |
+| **📄 Markdown**   | [api-doc.md](./api-doc.md)                               | Detaylı Markdown dokümantasyonu |
+| **📋 OpenAPI**    | [swagger.json](./swagger.json)                           | OpenAPI 3.0 spesifikasyonu      |
+
+### ⚡ API'yi Test Etme
+
+```bash
+# API durumu kontrolü
+curl http://localhost:3000/health
+
+# Temel endpoint testi
+curl http://localhost:3000/api/universities
+
+# Gelişmiş arama testi
+curl "http://localhost:3000/api/search/advanced?cities=İstanbul&universityTypes=Devlet"
+```
+
+## ✨ Yeni Özellikler (v2.0.0)
+
+### 🔍 Gelişmiş Arama Sistemi
+
+- **🎯 Çoklu Kriter Filtreleme**: Üniversite türü, şehir, program türü, puan türü ve fakülte kategorilerine göre filtreleme
 - **📊 YÖK 2024 Veri Entegrasyonu**: Güncel puan aralıkları ve kontenjan bilgileri
-- **🎯 Akıllı Filtreleme**: Sayısal aralık filtreleri ve fuzzy text matching
+- **🔢 Sayısal Filtreler**: Puan aralığı (min/max) ve kontenjan aralığı (min/max) filtreleme
+- **📝 Akıllı Metin Arama**: Program adlarında fuzzy matching ile gelişmiş arama
 - **🏷️ Fakülte Kategorileri**: 7 ana fakülte kategorisi ile gelişmiş filtreleme
 
-## Dokümantasyon Dosyaları
+### 🚀 Performans İyileştirmeleri
 
-1. **api-doc.md**: API'nin tüm endpoint'lerini, parametrelerini, dönüş değerlerini ve örnek kullanımlarını içeren detaylı Markdown dokümantasyonu. Gelişmiş arama endpoint'leri dahil.
+- **⚡ In-Memory Caching**: %90 hızlanma tekrarlanan isteklerde
+- **🗜️ Gzip Compression**: %70 veri boyutu azalması
+- **🛡️ Rate Limiting**: API güvenliği için istek sınırlaması
+- **📊 Request Logging**: Detaylı performans ve kullanım logları
 
-2. **swagger.json**: API'nin Swagger/OpenAPI formatında tanımı. Yeni gelişmiş arama endpoint'leri ile güncellenmiştir. Bu dosya, Swagger UI veya diğer OpenAPI uyumlu araçlarla görüntülenebilir.
+## 📁 Dokümantasyon Dosyaları
 
-## Swagger UI ile Dokümantasyonu Görüntüleme
+### 📄 Ana Dokümantasyon
 
-Swagger UI, API dokümantasyonunuzu interaktif bir şekilde görüntülemenizi sağlar. Swagger UI'ı kullanmak için:
+| Dosya                              | Format   | Açıklama                   | Boyut |
+| ---------------------------------- | -------- | -------------------------- | ----- |
+| **[api-doc.md](./api-doc.md)**     | Markdown | Detaylı API dokümantasyonu | ~50KB |
+| **[swagger.json](./swagger.json)** | JSON     | OpenAPI 3.0 spesifikasyonu | ~25KB |
+| **[index.html](./index.html)**     | HTML     | Swagger UI sayfası         | ~5KB  |
+| **README.md**                      | Markdown | Bu dokümantasyon rehberi   | ~10KB |
 
-1. Swagger UI'ı çevrimiçi olarak kullanabilirsiniz:
+### 📊 İçerik Özeti
 
-   - [Swagger Editor](https://editor.swagger.io/) sayfasını açın
-   - `swagger.json` dosyasının içeriğini editöre yapıştırın
+```
+📚 Toplam Dokümantasyon:
+├── 15+ API Endpoint'i
+├── 50+ Parametre Açıklaması
+├── 30+ Örnek İstek/Yanıt
+├── 10+ Veri Modeli
+└── 20+ Kullanım Örneği
+```
 
-2. Alternatif olarak, Swagger UI'ı yerel olarak çalıştırabilirsiniz:
-   ```bash
-   # Swagger UI Docker imajını çalıştırma
-   docker run -p 8080:8080 -e SWAGGER_JSON=/swagger.json -v $(pwd)/swagger.json:/swagger.json swaggerapi/swagger-ui
-   ```
-   Ardından tarayıcınızda `http://localhost:8080` adresini açın.
+## 🌐 Swagger UI
 
-## Postman Koleksiyonu
+### 🚀 Yerel Swagger UI
 
-API'yi test etmek için Postman kullanabilirsiniz. Swagger JSON dosyasını Postman'e aktarmak için:
+API çalışırken **[http://localhost:3000/docs](http://localhost:3000/docs)** adresini ziyaret ederek interaktif API dokümantasyonuna erişebilirsiniz.
 
-1. Postman'i açın
-2. "Import" düğmesine tıklayın
-3. "Raw text" sekmesini seçin
+### 🌟 Swagger UI Özellikleri
+
+- **🔍 İnteraktif Test**: Endpoint'leri doğrudan test etme
+- **📋 Parametre Editörü**: Kolay parametre girişi
+- **📊 Yanıt Görüntüleme**: Gerçek zamanlı API yanıtları
+- **📝 Kod Örnekleri**: Çoklu dil desteği (curl, JavaScript, Python)
+- **🔒 Yetkilendirme**: API key ve token desteği
+
+### 🔧 Alternatif Swagger Görüntüleme
+
+#### Online Swagger Editor
+
+1. **[Swagger Editor](https://editor.swagger.io/)** sayfasını açın
+2. `swagger.json` dosyasının içeriğini editöre yapıştırın
+3. İnteraktif dokümantasyonu görüntüleyin
+
+#### Docker ile Yerel Swagger UI
+
+```bash
+# Swagger UI Docker container'ı çalıştırma
+docker run -p 8080:8080 \
+  -e SWAGGER_JSON=/swagger.json \
+  -v $(pwd)/swagger.json:/swagger.json \
+  swaggerapi/swagger-ui
+
+# Tarayıcıda açın: http://localhost:8080
+```
+
+## 🔧 API Test Araçları
+
+### 📮 Postman Entegrasyonu
+
+#### Otomatik Import
+
+1. **Postman**'i açın
+2. **"Import"** düğmesine tıklayın
+3. **"Raw text"** sekmesini seçin
 4. `swagger.json` dosyasının içeriğini yapıştırın
-5. "Import" düğmesine tıklayın
+5. **"Import"** düğmesine tıklayın
 
-Bu, API'nin tüm endpoint'lerini içeren bir Postman koleksiyonu oluşturacaktır.
-
-## API Kullanım Örnekleri
-
-### cURL Örnekleri
-
-#### Sistem durumu kontrolü
+#### Manuel Collection Oluşturma
 
 ```bash
-curl -X GET http://localhost:3000/health
+# Postman Collection export
+curl -X GET http://localhost:3000/docs/postman-collection.json
 ```
 
-#### Tüm üniversiteleri listele
+### 🔧 Insomnia Entegrasyonu
+
+1. **Insomnia**'yı açın
+2. **"Import/Export"** > **"Import Data"** > **"From File"**
+3. `swagger.json` dosyasını seçin
+4. API koleksiyonu otomatik oluşturulur
+
+### ⚡ Thunder Client (VS Code)
+
+1. VS Code'da **Thunder Client** eklentisini kurun
+2. **"Import"** > **"OpenAPI"** seçin
+3. `swagger.json` dosyasını import edin
+
+## 📝 Kullanım Örnekleri
+
+### 🔧 cURL Örnekleri
+
+#### 💚 Sistem Durumu Kontrolü
 
 ```bash
+# Health check
+curl -X GET http://localhost:3000/health \
+  -H "Accept: application/json"
+```
+
+#### 🏫 Temel Üniversite İşlemleri
+
+```bash
+# Tüm üniversiteleri listele
 curl -X GET http://localhost:3000/api/universities
-```
 
-#### ID'ye göre üniversite getir
-
-```bash
+# ID'ye göre üniversite getir
 curl -X GET http://localhost:3000/api/universities/1
-```
 
-#### Şehre göre üniversiteleri filtrele
-
-```bash
+# Şehre göre filtrele
 curl -X GET http://localhost:3000/api/universities/city/istanbul
-```
 
-#### Türe göre üniversiteleri filtrele
-
-```bash
+# Türe göre filtrele
 curl -X GET http://localhost:3000/api/universities/type/devlet
 ```
 
-#### Fakülte ara
+#### 🔍 Arama İşlemleri
 
 ```bash
+# Fakülte ara
 curl -X GET "http://localhost:3000/api/search/faculty?name=mühendislik"
-```
 
-#### Program ara
-
-```bash
+# Program ara
 curl -X GET "http://localhost:3000/api/search/program?name=bilgisayar"
+
+# Puan aralığı ile program ara
+curl -X GET "http://localhost:3000/api/programs/score-range?minScore=400&maxScore=500&scoreType=SAY"
 ```
 
-#### 🆕 Filtre seçeneklerini getir
+#### 🆕 Gelişmiş Arama Örnekleri
 
 ```bash
+# Filtre seçeneklerini getir
 curl -X GET "http://localhost:3000/api/search/filters"
-```
 
-#### 🆕 Gelişmiş çoklu kriter arama
+# İstanbul'daki Devlet üniversitelerinde Mühendislik programları
+curl -X GET "http://localhost:3000/api/search/advanced?cities=İstanbul&universityTypes=Devlet&facultyCategories=engineering&minScore=400&sortBy=name&sortOrder=asc"
 
-```bash
-# İstanbul ve Ankara'daki Devlet üniversitelerinde SAY puanı ile Mühendislik programları
-curl -X GET "http://localhost:3000/api/search/advanced?cities=İstanbul,Ankara&universityTypes=Devlet&scoreTypes=SAY&facultyCategories=engineering&minScore=400&sortBy=name&sortOrder=asc"
-```
-
-#### 🆕 Program adına göre gelişmiş arama
-
-```bash
+# Program adına göre gelişmiş arama
 curl -X GET "http://localhost:3000/api/search/advanced?programName=bilgisayar mühendisliği"
-```
 
-#### 🆕 Puan aralığı ve kontenjan filtreleme
-
-```bash
+# Puan ve kontenjan filtreleme
 curl -X GET "http://localhost:3000/api/search/advanced?minScore=450&maxScore=550&minQuota=20&maxQuota=100"
 ```
 
-### JavaScript Örnekleri
+### 📊 İstatistik ve Monitoring
 
-#### Sistem durumu kontrolü
+```bash
+# Enhanced data istatistikleri
+curl -X GET http://localhost:3000/api/statistics
 
-```javascript
-fetch("http://localhost:3000/health")
-  .then((response) => response.json())
-  .then((data) => console.log(data))
-  .catch((error) => console.error("Hata:", error));
+# API bilgisi
+curl -X GET http://localhost:3000/
 ```
 
-#### Tüm üniversiteleri listele
+### 🌐 JavaScript/TypeScript Örnekleri
+
+#### 💚 Sistem Durumu ve Temel İşlemler
 
 ```javascript
-fetch("http://localhost:3000/api/universities")
-  .then((response) => response.json())
-  .then((data) => console.log(data))
-  .catch((error) => console.error("Hata:", error));
+// Modern async/await syntax
+async function checkApiHealth() {
+  try {
+    const response = await fetch("http://localhost:3000/health");
+    const data = await response.json();
+    console.log("API Status:", data.status);
+    console.log("Uptime:", data.uptime);
+  } catch (error) {
+    console.error("API Error:", error);
+  }
+}
+
+// Tüm üniversiteleri getir
+async function getAllUniversities() {
+  const response = await fetch("http://localhost:3000/api/universities");
+  const universities = await response.json();
+  console.log(`${universities.length} üniversite bulundu`);
+  return universities;
+}
 ```
 
-#### ID'ye göre üniversite getir
+#### 🔍 Gelişmiş Arama İşlemleri
 
 ```javascript
-fetch("http://localhost:3000/api/universities/1")
-  .then((response) => response.json())
-  .then((data) => console.log(data))
-  .catch((error) => console.error("Hata:", error));
-```
+// Filtre seçeneklerini getir
+async function getFilterOptions() {
+  const response = await fetch("http://localhost:3000/api/search/filters");
+  const filters = await response.json();
 
-#### Şehre göre üniversiteleri filtrele
+  console.log("Mevcut şehirler:", filters.cities);
+  console.log("Puan türleri:", filters.scoreTypes);
+  console.log("Fakülte kategorileri:", filters.facultyCategories);
 
-```javascript
-fetch("http://localhost:3000/api/universities/city/istanbul")
-  .then((response) => response.json())
-  .then((data) => console.log(data))
-  .catch((error) => console.error("Hata:", error));
-```
+  return filters;
+}
 
-#### 🆕 Filtre seçeneklerini getir
+// Gelişmiş çoklu kriter arama
+async function advancedSearch(filters) {
+  const params = new URLSearchParams({
+    cities: filters.cities?.join(",") || "",
+    universityTypes: filters.universityTypes?.join(",") || "",
+    scoreTypes: filters.scoreTypes?.join(",") || "",
+    facultyCategories: filters.facultyCategories?.join(",") || "",
+    minScore: filters.minScore || "",
+    maxScore: filters.maxScore || "",
+    sortBy: filters.sortBy || "name",
+    sortOrder: filters.sortOrder || "asc",
+  });
 
-```javascript
-fetch("http://localhost:3000/api/search/filters")
-  .then((response) => response.json())
-  .then((data) => {
-    console.log("Mevcut şehirler:", data.cities);
-    console.log("Puan türleri:", data.scoreTypes);
-    console.log("Fakülte kategorileri:", data.facultyCategories);
-  })
-  .catch((error) => console.error("Hata:", error));
-```
+  const response = await fetch(
+    `http://localhost:3000/api/search/advanced?${params}`
+  );
+  const results = await response.json();
 
-#### 🆕 Gelişmiş çoklu kriter arama
+  console.log(`${results.count} sonuç bulundu`);
+  console.log("Uygulanan filtreler:", results.filters);
 
-```javascript
-// Parametreleri hazırla
-const params = new URLSearchParams({
-  cities: "İstanbul,Ankara",
-  universityTypes: "Devlet",
-  scoreTypes: "SAY",
-  facultyCategories: "engineering",
-  minScore: "400",
+  return results;
+}
+
+// Kullanım örneği
+const searchFilters = {
+  cities: ["İstanbul", "Ankara"],
+  universityTypes: ["Devlet"],
+  scoreTypes: ["SAY"],
+  facultyCategories: ["engineering"],
+  minScore: 400,
   sortBy: "name",
-  sortOrder: "asc",
-});
+};
 
-fetch(`http://localhost:3000/api/search/advanced?${params}`)
-  .then((response) => response.json())
-  .then((data) => {
-    console.log(`${data.count} sonuç bulundu`);
-    console.log("Uygulanan filtreler:", data.filters);
-    console.log("Sonuçlar:", data.results);
-  })
-  .catch((error) => console.error("Hata:", error));
+advancedSearch(searchFilters);
 ```
 
-#### 🆕 Program adına göre gelişmiş arama
+#### 📊 TypeScript ile Tip Güvenli Kullanım
 
-```javascript
-fetch(
-  "http://localhost:3000/api/search/advanced?programName=bilgisayar mühendisliği"
-)
-  .then((response) => response.json())
-  .then((data) => {
-    console.log("Bulunan programlar:");
-    data.results.forEach((uni) => {
-      console.log(`${uni.name} - ${uni.city}`);
-      uni.faculties.forEach((faculty) => {
-        faculty.programs.forEach((program) => {
-          console.log(`  - ${program.name}`);
-        });
-      });
-    });
-  })
-  .catch((error) => console.error("Hata:", error));
+```typescript
+interface University {
+  id: number;
+  name: string;
+  type: string;
+  city: string;
+  website: string;
+  faculties: Faculty[];
+}
+
+interface SearchResult {
+  count: number;
+  filters: any;
+  sorting: any;
+  results: University[];
+}
+
+async function typedAdvancedSearch(filters: any): Promise<SearchResult> {
+  const response = await fetch(
+    `http://localhost:3000/api/search/advanced?${params}`
+  );
+  return response.json() as Promise<SearchResult>;
+}
 ```
 
-## Daha Fazla Bilgi
+## 🔗 Harici Araçlar
 
-Daha detaylı bilgi için `api-doc.md` dosyasına bakabilirsiniz.
+### 📋 OpenAPI/Swagger Uyumlu Araçlar
+
+| Araç               | Platform    | Açıklama                  | Link                                                                                            |
+| ------------------ | ----------- | ------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Swagger Editor** | Web         | Online API editörü        | [editor.swagger.io](https://editor.swagger.io/)                                                 |
+| **Postman**        | Desktop/Web | API test ve dokümantasyon | [postman.com](https://www.postman.com/)                                                         |
+| **Insomnia**       | Desktop     | REST client               | [insomnia.rest](https://insomnia.rest/)                                                         |
+| **Thunder Client** | VS Code     | VS Code eklentisi         | [marketplace](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client) |
+| **Swagger UI**     | Docker      | Self-hosted UI            | [hub.docker.com](https://hub.docker.com/r/swaggerapi/swagger-ui/)                               |
+
+## 📚 Ek Kaynaklar
+
+### 📖 Dokümantasyon Linkleri
+
+- **[Ana README](../../../README.md)** - Proje genel bilgileri
+- **[Backend README](../README.md)** - Backend spesifik dokümantasyon
+- **[Frontend README](../../frontend/README.md)** - Frontend dokümantasyonu
+- **[API Detay Dokümantasyonu](./api-doc.md)** - Kapsamlı API rehberi
+
+### 🌐 Resmi Kaynaklar
+
+- **[YÖK](https://www.yok.gov.tr/)** - Yükseköğretim Kurulu
+- **[YÖK Atlas](https://yokatlas.yok.gov.tr/)** - Üniversite ve program bilgileri
+- **[ÖSYM](https://www.osym.gov.tr/)** - Sınav ve yerleştirme bilgileri
+
+### 🔧 Geliştirici Araçları
+
+- **[OpenAPI Specification](https://swagger.io/specification/)** - OpenAPI 3.0 spesifikasyonu
+- **[JSON Schema](https://json-schema.org/)** - JSON şema validasyonu
+- **[Swagger Tools](https://swagger.io/tools/)** - Swagger araç seti
+
+---
+
+<div align="center">
+
+**📚 API Dokümantasyonu • Türkiye Üniversiteleri Projesi**
+
+_Kapsamlı ve güncel API dokümantasyonu • Made with ❤️ in Turkey_
+
+</div>

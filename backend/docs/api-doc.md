@@ -1,14 +1,41 @@
-# Türkiye Üniversiteleri API Dokümantasyonu
+# 📚 Türkiye Üniversiteleri API Dokümantasyonu
+
+[![API Version](https://img.shields.io/badge/API-v2.0.0-brightgreen.svg)](#)
+[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0-green.svg)](https://swagger.io/specification/)
+
+> **Türkiye Üniversiteleri API'sinin kapsamlı teknik dokümantasyonu**
 
 Bu dokümantasyon, Türkiye Üniversiteleri API'sinin tüm endpoint'lerini, parametrelerini, dönüş değerlerini ve örnek kullanımlarını içerir.
 
-## Genel Bakış
+## 📋 İçindekiler
 
-Türkiye Üniversiteleri API, Türkiye'deki üniversiteler hakkında kapsamlı bilgi sağlayan RESTful bir API servisidir. Bu API ile üniversiteleri listeleyebilir, filtreleyebilir ve detaylı bilgilerini görüntüleyebilirsiniz.
+- [🌐 Genel Bakış](#-genel-bakış)
+- [✨ Yeni Özellikler (v2.0.0)](#-yeni-özellikler-v200)
+- [🔧 HTTP Headers](#-http-headers)
+- [🌍 Temel URL](#-temel-url)
+- [📊 Endpoint'ler](#-endpointler)
+  - [💚 Health Check](#-health-check)
+  - [ℹ️ API Bilgisi](#ℹ️-api-bilgisi)
+  - [🏫 Üniversite İşlemleri](#-üniversite-işlemleri)
+  - [🔍 Arama İşlemleri](#-arama-işlemleri)
+  - [🆕 Gelişmiş Arama](#-gelişmiş-arama)
+- [🏗️ Veri Modelleri](#️-veri-modelleri)
+- [🏷️ Fakülte Kategorileri](#️-fakülte-kategorileri)
+- [⚠️ Hata Kodları](#️-hata-kodları)
+- [📝 Kullanım Örnekleri](#-kullanım-örnekleri)
 
-## Yeni Özellikler (v2.0.0)
+## 🌐 Genel Bakış
 
-### 🔍 Kapsamlı Gelişmiş Arama Sistemi:
+Türkiye Üniversiteleri API, Türkiye'deki üniversiteler hakkında kapsamlı bilgi sağlayan **RESTful API servisi**dir. Bu API ile:
+
+- ✅ Üniversiteleri listeleyebilir ve filtreleyebilirsiniz
+- 🔍 Gelişmiş arama ve filtreleme yapabilirsiniz
+- 📊 YÖK 2024 verilerine erişebilirsiniz
+- ⚖️ Üniversite ve program karşılaştırması yapabilirsiniz
+
+## ✨ Yeni Özellikler (v2.0.0)
+
+### 🔍 Kapsamlı Gelişmiş Arama Sistemi
 
 - **🎯 Çoklu Kriter Filtreleme**: Üniversite türü, şehir, program türü, puan türü ve fakülte kategorilerine göre filtreleme
 - **📊 YÖK 2024 Veri Entegrasyonu**: Güncel YÖK verilerine dayalı puan aralıkları ve kontenjan bilgileri
@@ -27,24 +54,26 @@ Türkiye Üniversiteleri API, Türkiye'deki üniversiteler hakkında kapsamlı b
 - **💚 Health Check**: Sistem durumu izleme endpoint'i
 - **🛡️ Error Handling**: Kapsamlı hata yönetimi ve kullanıcı dostu mesajlar
 
-## HTTP Headers
+## 🔧 HTTP Headers
 
 API, aşağıdaki özel header'ları döndürür:
 
-- `X-Cache`: Cache durumu (HIT/MISS)
-- `X-RateLimit-Limit`: İzin verilen maksimum istek sayısı
-- `X-RateLimit-Remaining`: Kalan istek sayısı
-- `X-RateLimit-Reset`: Rate limit'in sıfırlanacağı zaman (Unix timestamp)
+| Header                  | Açıklama                                      | Örnek Değer    |
+| ----------------------- | --------------------------------------------- | -------------- |
+| `X-Cache`               | Cache durumu                                  | `HIT` / `MISS` |
+| `X-RateLimit-Limit`     | İzin verilen maksimum istek sayısı            | `100`          |
+| `X-RateLimit-Remaining` | Kalan istek sayısı                            | `95`           |
+| `X-RateLimit-Reset`     | Rate limit sıfırlanma zamanı (Unix timestamp) | `1640995200`   |
 
-## Temel URL
+## 🌍 Temel URL
 
 ```
 http://localhost:3000
 ```
 
-## Endpoint'ler
+## 📊 Endpoint'ler
 
-### 1. Health Check
+### 💚 Health Check
 
 Sistem durumunu ve performans metriklerini döndürür.
 
@@ -68,7 +97,7 @@ Sistem durumunu ve performans metriklerini döndürür.
     }
     ```
 
-### 2. API Bilgisi
+### ℹ️ API Bilgisi
 
 API hakkında genel bilgi ve kullanılabilir endpoint'leri döndürür.
 
@@ -95,7 +124,9 @@ API hakkında genel bilgi ve kullanılabilir endpoint'leri döndürür.
     }
     ```
 
-### 2. Tüm Üniversiteleri Listele
+## 🏫 Üniversite İşlemleri
+
+### Tüm Üniversiteleri Listele
 
 Türkiye'deki tüm üniversitelerin listesini döndürür.
 
@@ -445,7 +476,7 @@ Gelişmiş arama için mevcut filtre seçeneklerini döndürür.
           "count": 28
         }
       ],
-      "totalUniversities": 207,
+      "totalUniversities": 205,
       "totalCities": 81
     }
     ```
@@ -622,16 +653,173 @@ interface QuotaInfo {
 }
 ```
 
-## Fakülte Kategorileri
+## 🏷️ Fakülte Kategorileri
 
 Gelişmiş aramada kullanılan fakülte kategorileri:
 
-| Kategori ID   | Kategori Adı       | Açıklama                             |
-| ------------- | ------------------ | ------------------------------------ |
-| `engineering` | Mühendislik        | Mühendislik ve teknik fakülteler     |
-| `medicine`    | Tıp ve Sağlık      | Tıp, diş hekimliği, sağlık bilimleri |
-| `social`      | Sosyal Bilimler    | Sosyal bilimler, edebiyat, iktisadi  |
-| `science`     | Fen Bilimleri      | Fen, matematik, fizik, kimya         |
-| `education`   | Eğitim             | Eğitim fakülteleri ve öğretmenlik    |
-| `law`         | Hukuk              | Hukuk fakülteleri                    |
-| `business`    | İşletme ve Ticaret | İşletme, ticaret, ekonomi            |
+| Kategori ID   | Kategori Adı       | Açıklama                             | Örnek Fakülteler               |
+| ------------- | ------------------ | ------------------------------------ | ------------------------------ |
+| `engineering` | Mühendislik        | Mühendislik ve teknik fakülteler     | Bilgisayar, Elektrik, Makine   |
+| `medicine`    | Tıp ve Sağlık      | Tıp, diş hekimliği, sağlık bilimleri | Tıp, Diş Hekimliği, Hemşirelik |
+| `social`      | Sosyal Bilimler    | Sosyal bilimler, edebiyat, iktisadi  | Edebiyat, Tarih, Sosyoloji     |
+| `science`     | Fen Bilimleri      | Fen, matematik, fizik, kimya         | Matematik, Fizik, Kimya        |
+| `education`   | Eğitim             | Eğitim fakülteleri ve öğretmenlik    | Eğitim Fakültesi               |
+| `law`         | Hukuk              | Hukuk fakülteleri                    | Hukuk Fakültesi                |
+| `business`    | İşletme ve Ticaret | İşletme, ticaret, ekonomi            | İşletme, İktisat               |
+
+## ⚠️ Hata Kodları
+
+API, standart HTTP durum kodlarını kullanır:
+
+### 🟢 Başarılı Yanıtlar (2xx)
+
+| Kod   | Açıklama | Kullanım                                   |
+| ----- | -------- | ------------------------------------------ |
+| `200` | OK       | Başarılı GET istekleri                     |
+| `201` | Created  | Başarılı POST istekleri (gelecek sürümler) |
+
+### 🟡 Client Hataları (4xx)
+
+| Kod   | Açıklama          | Örnek Durum        |
+| ----- | ----------------- | ------------------ |
+| `400` | Bad Request       | Geçersiz parametre |
+| `404` | Not Found         | Kaynak bulunamadı  |
+| `429` | Too Many Requests | Rate limit aşıldı  |
+
+### 🔴 Server Hataları (5xx)
+
+| Kod   | Açıklama              | Örnek Durum           |
+| ----- | --------------------- | --------------------- |
+| `500` | Internal Server Error | Sunucu hatası         |
+| `503` | Service Unavailable   | Servis kullanılamıyor |
+
+### Hata Yanıt Formatı
+
+```json
+{
+  "error": "Hata mesajı",
+  "code": "ERROR_CODE",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "path": "/api/universities/999"
+}
+```
+
+## 📝 Kullanım Örnekleri
+
+### 🔧 Rate Limiting Örneği
+
+```javascript
+// Rate limit kontrolü ile API çağrısı
+async function apiCallWithRateLimit(url) {
+  try {
+    const response = await fetch(url);
+
+    // Rate limit header'larını kontrol et
+    const limit = response.headers.get("X-RateLimit-Limit");
+    const remaining = response.headers.get("X-RateLimit-Remaining");
+    const reset = response.headers.get("X-RateLimit-Reset");
+
+    console.log(
+      `Rate Limit: ${remaining}/${limit}, Reset: ${new Date(reset * 1000)}`
+    );
+
+    if (response.status === 429) {
+      throw new Error("Rate limit exceeded");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("API Error:", error);
+    throw error;
+  }
+}
+```
+
+### 🔍 Gelişmiş Arama Örneği
+
+```javascript
+// Kapsamlı gelişmiş arama örneği
+async function comprehensiveSearch() {
+  // 1. Önce filtre seçeneklerini al
+  const filters = await fetch("http://localhost:3000/api/search/filters").then(
+    (res) => res.json()
+  );
+
+  console.log("Mevcut filtreler:", filters);
+
+  // 2. Gelişmiş arama yap
+  const searchParams = new URLSearchParams({
+    cities: "İstanbul,Ankara,İzmir",
+    universityTypes: "Devlet",
+    scoreTypes: "SAY,EA",
+    facultyCategories: "engineering,medicine",
+    minScore: "400",
+    maxScore: "600",
+    minQuota: "10",
+    sortBy: "name",
+    sortOrder: "asc",
+  });
+
+  const results = await fetch(
+    `http://localhost:3000/api/search/advanced?${searchParams}`
+  ).then((res) => res.json());
+
+  console.log(`${results.count} sonuç bulundu`);
+
+  // 3. Sonuçları işle
+  results.results.forEach((university) => {
+    console.log(`\n🏫 ${university.name} (${university.city})`);
+
+    university.faculties.forEach((faculty) => {
+      console.log(`  📚 ${faculty.name}`);
+
+      faculty.programs.forEach((program) => {
+        if (program.yokData2024) {
+          const quota = program.yokData2024.quota.general;
+          console.log(`    🎓 ${program.name}`);
+          console.log(`       📊 Puan: ${quota.minScore}-${quota.maxScore}`);
+          console.log(`       👥 Kontenjan: ${quota.total}`);
+        }
+      });
+    });
+  });
+}
+```
+
+### 📊 İstatistik Analizi Örneği
+
+```javascript
+// API istatistiklerini analiz et
+async function analyzeStatistics() {
+  const stats = await fetch("http://localhost:3000/api/statistics").then(
+    (res) => res.json()
+  );
+
+  console.log("📊 API İstatistikleri:");
+  console.log(`🏫 Toplam Üniversite: ${stats.totalUniversities}`);
+  console.log(`🏙️ Toplam Şehir: ${stats.totalCities}`);
+  console.log(`📚 Toplam Fakülte: ${stats.totalFaculties}`);
+  console.log(`🎓 Toplam Program: ${stats.totalPrograms}`);
+
+  // Şehir bazında analiz
+  const cityStats = stats.universitiesByCity;
+  const topCities = Object.entries(cityStats)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 5);
+
+  console.log("\n🏆 En Çok Üniversiteye Sahip Şehirler:");
+  topCities.forEach(([city, count], index) => {
+    console.log(`${index + 1}. ${city}: ${count} üniversite`);
+  });
+}
+```
+
+---
+
+<div align="center">
+
+**📚 API Dokümantasyonu • Türkiye Üniversiteleri Projesi**
+
+_Kapsamlı ve güncel API referansı • Made with ❤️ in Turkey_
+
+</div>

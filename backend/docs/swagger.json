@@ -944,7 +944,7 @@
         "properties": {
           "universities": {
             "type": "integer",
-            "example": 207
+            "example": 205
           },
           "totalPrograms": {
             "type": "integer",
@@ -1039,7 +1039,7 @@
           },
           "totalUniversities": {
             "type": "integer",
-            "example": 207
+            "example": 205
           },
           "totalCities": {
             "type": "integer",
