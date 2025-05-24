@@ -499,7 +499,7 @@ Gelişmiş arama için mevcut filtre seçeneklerini döndürür.
   - `minQuota` - Minimum kontenjan (sayı, opsiyonel)
   - `maxQuota` - Maksimum kontenjan (sayı, opsiyonel)
   - `programName` - Program adı (metin, opsiyonel)
-  - `sortBy` - Sıralama kriteri (name, city, programCount, facultyCount, opsiyonel)
+  - `sortBy` - Sıralama kriteri (name, city, programCount, facultyCount, score, opsiyonel)
   - `sortOrder` - Sıralama yönü (asc, desc, opsiyonel)
 
 - **Örnek İstek:**

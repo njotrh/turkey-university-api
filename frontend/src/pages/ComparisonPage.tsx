@@ -243,7 +243,18 @@ const ComparisonPage = () => {
 
           <div className="w-full sm:w-auto">
             <ExportButton
-              data={universities}
+              comparisonData={{
+                universities,
+                selectedProgram: showProgramComparison
+                  ? selectedProgram
+                  : undefined,
+                programComparisonData:
+                  showProgramComparison && selectedProgram
+                    ? universities.map((uni) =>
+                        getProgramDataForUniversity(uni, selectedProgram)
+                      )
+                    : undefined,
+              }}
               filename="university-comparison"
               label="Karşılaştırmayı Dışa Aktar"
               size="md"

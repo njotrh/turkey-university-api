@@ -10,6 +10,7 @@ import {
 import ProgramCard from "../components/ProgramCard";
 import ComparisonButton from "../components/ComparisonButton";
 import FavoriteButton from "../components/FavoriteButton";
+import ExportButton from "../components/ExportButton";
 import {
   ArrowLeftIcon,
   BuildingLibraryIcon,
@@ -69,6 +70,7 @@ const EnhancedSearchPage = () => {
       const results = await advancedSearch(filters);
       setSearchResults(results);
     } catch (err) {
+      console.error("Search error:", err);
       setError("Arama sırasında bir hata oluştu.");
       setSearchResults(null);
     } finally {
@@ -336,14 +338,16 @@ const EnhancedSearchPage = () => {
                     type="number"
                     placeholder="Min puan"
                     value={filters.scoreRange?.min || ""}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
                       updateFilter("scoreRange", {
                         ...filters.scoreRange,
-                        min: e.target.value
-                          ? parseFloat(e.target.value)
-                          : undefined,
-                      })
-                    }
+                        min:
+                          value && !isNaN(parseFloat(value))
+                            ? parseFloat(value)
+                            : undefined,
+                      });
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -352,14 +356,16 @@ const EnhancedSearchPage = () => {
                     type="number"
                     placeholder="Max puan"
                     value={filters.scoreRange?.max || ""}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
                       updateFilter("scoreRange", {
                         ...filters.scoreRange,
-                        max: e.target.value
-                          ? parseFloat(e.target.value)
-                          : undefined,
-                      })
-                    }
+                        max:
+                          value && !isNaN(parseFloat(value))
+                            ? parseFloat(value)
+                            : undefined,
+                      });
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -377,14 +383,16 @@ const EnhancedSearchPage = () => {
                     type="number"
                     placeholder="Min kontenjan"
                     value={filters.quotaRange?.min || ""}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
                       updateFilter("quotaRange", {
                         ...filters.quotaRange,
-                        min: e.target.value
-                          ? parseInt(e.target.value)
-                          : undefined,
-                      })
-                    }
+                        min:
+                          value && !isNaN(parseInt(value))
+                            ? parseInt(value)
+                            : undefined,
+                      });
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -393,14 +401,16 @@ const EnhancedSearchPage = () => {
                     type="number"
                     placeholder="Max kontenjan"
                     value={filters.quotaRange?.max || ""}
-                    onChange={(e) =>
+                    onChange={(e) => {
+                      const value = e.target.value;
                       updateFilter("quotaRange", {
                         ...filters.quotaRange,
-                        max: e.target.value
-                          ? parseInt(e.target.value)
-                          : undefined,
-                      })
-                    }
+                        max:
+                          value && !isNaN(parseInt(value))
+                            ? parseInt(value)
+                            : undefined,
+                      });
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
@@ -422,6 +432,7 @@ const EnhancedSearchPage = () => {
                   <option value="city">Şehir</option>
                   <option value="programCount">Program Sayısı</option>
                   <option value="facultyCount">Fakülte Sayısı</option>
+                  <option value="score">Puan (YÖK 2024)</option>
                 </select>
                 <select
                   value={filters.sortOrder || "asc"}
@@ -459,25 +470,40 @@ const EnhancedSearchPage = () => {
       {searchResults && (
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              Arama Sonuçları
-            </h2>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-              <span>
-                <strong>{searchResults.count}</strong> sonuç bulundu
-              </span>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                  Arama Sonuçları
+                </h2>
+                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                  <span>
+                    <strong>{searchResults.count}</strong> sonuç bulundu
+                  </span>
+                  {searchResults.results.length > 0 && (
+                    <span className="flex items-center gap-1">
+                      <HeartIcon className="w-4 h-4 text-red-500" />
+                      <strong>
+                        {
+                          searchResults.results.filter((uni) =>
+                            favorites.some((fav) => fav.id === uni.id)
+                          ).length
+                        }
+                      </strong>
+                      favoride
+                    </span>
+                  )}
+                </div>
+              </div>
+
               {searchResults.results.length > 0 && (
-                <span className="flex items-center gap-1">
-                  <HeartIcon className="w-4 h-4 text-red-500" />
-                  <strong>
-                    {
-                      searchResults.results.filter((uni) =>
-                        favorites.some((fav) => fav.id === uni.id)
-                      ).length
-                    }
-                  </strong>
-                  favoride
-                </span>
+                <div className="w-full sm:w-auto">
+                  <ExportButton
+                    advancedSearchData={searchResults}
+                    filename="gelismis-arama-sonuclari"
+                    label="Sonuçları Dışa Aktar"
+                    size="md"
+                  />
+                </div>
               )}
             </div>
           </div>

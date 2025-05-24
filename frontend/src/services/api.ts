@@ -135,16 +135,28 @@ export const advancedSearch = async (
   if (filters.facultyCategories?.length) {
     params.append("facultyCategories", filters.facultyCategories.join(","));
   }
-  if (filters.scoreRange?.min !== undefined) {
+  if (
+    filters.scoreRange?.min !== undefined &&
+    filters.scoreRange.min !== null
+  ) {
     params.append("minScore", filters.scoreRange.min.toString());
   }
-  if (filters.scoreRange?.max !== undefined) {
+  if (
+    filters.scoreRange?.max !== undefined &&
+    filters.scoreRange.max !== null
+  ) {
     params.append("maxScore", filters.scoreRange.max.toString());
   }
-  if (filters.quotaRange?.min !== undefined) {
+  if (
+    filters.quotaRange?.min !== undefined &&
+    filters.quotaRange.min !== null
+  ) {
     params.append("minQuota", filters.quotaRange.min.toString());
   }
-  if (filters.quotaRange?.max !== undefined) {
+  if (
+    filters.quotaRange?.max !== undefined &&
+    filters.quotaRange.max !== null
+  ) {
     params.append("maxQuota", filters.quotaRange.max.toString());
   }
   if (filters.programName) {

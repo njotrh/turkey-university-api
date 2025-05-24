@@ -13,6 +13,7 @@ import {
 } from "@heroicons/react/24/outline";
 import ComparisonButton from "../components/ComparisonButton";
 import ProgramCard from "../components/ProgramCard";
+import FavoriteButton from "../components/FavoriteButton";
 
 const SearchResultsPage = () => {
   const location = useLocation();
@@ -232,8 +233,18 @@ const SearchResultsPage = () => {
                 </span>
               </div>
 
-              {/* Comparison Button */}
-              <div className="ml-4">
+              {/* Action Buttons */}
+              <div className="ml-4 flex items-center space-x-2">
+                <FavoriteButton
+                  university={{
+                    ...result,
+                    website: "",
+                    address: "",
+                    logo: "",
+                  }}
+                  size="md"
+                  showText={false}
+                />
                 <ComparisonButton
                   university={{
                     ...result,
@@ -329,8 +340,18 @@ const SearchResultsPage = () => {
                 </span>
               </div>
 
-              {/* Comparison Button */}
-              <div className="ml-4">
+              {/* Action Buttons */}
+              <div className="ml-4 flex items-center space-x-2">
+                <FavoriteButton
+                  university={{
+                    ...result,
+                    website: "",
+                    address: "",
+                    logo: "",
+                  }}
+                  size="md"
+                  showText={false}
+                />
                 <ComparisonButton
                   university={{
                     ...result,

@@ -758,16 +758,23 @@ app.get("/api/search/advanced", cacheMiddleware(5 * 60 * 1000), (req, res) => {
                 generalQuota.minScore !== null &&
                 generalQuota.maxScore !== null
               ) {
+                // Program's score range must be completely within the filter range
+                const programMinScore = generalQuota.minScore;
+                const programMaxScore = generalQuota.maxScore;
+                const filterMinScore = minScore
+                  ? parseFloat(minScore as string)
+                  : Number.MIN_SAFE_INTEGER;
+                const filterMaxScore = maxScore
+                  ? parseFloat(maxScore as string)
+                  : Number.MAX_SAFE_INTEGER;
+
+                // Check if program's entire score range is within filter range
                 if (
-                  minScore &&
-                  generalQuota.maxScore < parseFloat(minScore as string)
-                )
+                  programMinScore < filterMinScore ||
+                  programMaxScore > filterMaxScore
+                ) {
                   return false;
-                if (
-                  maxScore &&
-                  generalQuota.minScore > parseFloat(maxScore as string)
-                )
-                  return false;
+                }
               }
             }
 
@@ -883,6 +890,42 @@ app.get("/api/search/advanced", cacheMiddleware(5 * 60 * 1000), (req, res) => {
         case "facultyCount":
           aValue = a.faculties.length;
           bValue = b.faculties.length;
+          break;
+        case "score":
+          // Calculate average score for university based on all programs
+          const aScores: number[] = [];
+          const bScores: number[] = [];
+
+          a.faculties.forEach((faculty) => {
+            faculty.programs.forEach((program) => {
+              if (
+                program.yokData2024?.quota?.general?.minScore !== null &&
+                program.yokData2024?.quota?.general?.minScore !== undefined
+              ) {
+                aScores.push(program.yokData2024.quota.general.minScore);
+              }
+            });
+          });
+
+          b.faculties.forEach((faculty) => {
+            faculty.programs.forEach((program) => {
+              if (
+                program.yokData2024?.quota?.general?.minScore !== null &&
+                program.yokData2024?.quota?.general?.minScore !== undefined
+              ) {
+                bScores.push(program.yokData2024.quota.general.minScore);
+              }
+            });
+          });
+
+          aValue =
+            aScores.length > 0
+              ? aScores.reduce((sum, score) => sum + score, 0) / aScores.length
+              : 0;
+          bValue =
+            bScores.length > 0
+              ? bScores.reduce((sum, score) => sum + score, 0) / bScores.length
+              : 0;
           break;
         default:
           return 0;

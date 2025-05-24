@@ -70,7 +70,7 @@ node index.ts
 - **🏷️ Fakülte Kategorileri**: Mühendislik, Tıp, Sosyal Bilimler, Fen Bilimleri, Eğitim, Hukuk, İşletme
 - **🔢 Sayısal Filtreler**: Puan aralığı (min/max) ve kontenjan aralığı (min/max)
 - **🔍 Akıllı Metin Arama**: Program adlarında fuzzy matching
-- **📋 Sıralama Seçenekleri**: Ad, şehir, program sayısı, fakülte sayısına göre sıralama
+- **📋 Sıralama Seçenekleri**: Ad, şehir, program sayısı, fakülte sayısı, puana göre sıralama
 
 ## 🔧 Teknik Spesifikasyonlar
 
@@ -97,7 +97,7 @@ node index.ts
 
 ### 🔒 Güvenlik Özellikleri
 
-- ✅ **Rate Limiting**: 100 istek/15 dakika
+- ✅ **Rate Limiting**: API kötüye kullanımını önlemek için istek sınırlaması
 - ✅ **CORS Protection**: Yapılandırılabilir origin kontrolü
 - ✅ **Input Validation**: Kapsamlı giriş doğrulama
 - ✅ **Error Handling**: Güvenli hata mesajları

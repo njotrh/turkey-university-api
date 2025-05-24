@@ -271,20 +271,20 @@ Backend API'si aşağıdaki endpoint'leri sunar:
 
 #### Gelişmiş Arama Parametreleri (`/api/search/advanced`)
 
-| Parametre           | Tür    | Açıklama                                                          | Örnek                         |
-| ------------------- | ------ | ----------------------------------------------------------------- | ----------------------------- |
-| `universityTypes`   | string | Üniversite türleri (virgülle ayrılmış)                            | `Devlet,Vakıf`                |
-| `cities`            | string | Şehirler (virgülle ayrılmış)                                      | `İstanbul,Ankara,İzmir`       |
-| `programTypes`      | string | Program türleri (virgülle ayrılmış)                               | `lisans,önlisans`             |
-| `scoreTypes`        | string | Puan türleri (virgülle ayrılmış)                                  | `SAY,EA,SÖZ`                  |
-| `facultyCategories` | string | Fakülte kategorileri (virgülle ayrılmış)                          | `engineering,medicine,social` |
-| `minScore`          | number | Minimum puan                                                      | `400`                         |
-| `maxScore`          | number | Maksimum puan                                                     | `500`                         |
-| `minQuota`          | number | Minimum kontenjan                                                 | `10`                          |
-| `maxQuota`          | number | Maksimum kontenjan                                                | `100`                         |
-| `programName`       | string | Program adı (fuzzy matching)                                      | `bilgisayar mühendisliği`     |
-| `sortBy`            | string | Sıralama kriteri (`name`, `city`, `programCount`, `facultyCount`) | `name`                        |
-| `sortOrder`         | string | Sıralama yönü (`asc`, `desc`)                                     | `asc`                         |
+| Parametre           | Tür    | Açıklama                                                                   | Örnek                         |
+| ------------------- | ------ | -------------------------------------------------------------------------- | ----------------------------- |
+| `universityTypes`   | string | Üniversite türleri (virgülle ayrılmış)                                     | `Devlet,Vakıf`                |
+| `cities`            | string | Şehirler (virgülle ayrılmış)                                               | `İstanbul,Ankara,İzmir`       |
+| `programTypes`      | string | Program türleri (virgülle ayrılmış)                                        | `lisans,önlisans`             |
+| `scoreTypes`        | string | Puan türleri (virgülle ayrılmış)                                           | `SAY,EA,SÖZ`                  |
+| `facultyCategories` | string | Fakülte kategorileri (virgülle ayrılmış)                                   | `engineering,medicine,social` |
+| `minScore`          | number | Minimum puan                                                               | `400`                         |
+| `maxScore`          | number | Maksimum puan                                                              | `500`                         |
+| `minQuota`          | number | Minimum kontenjan                                                          | `10`                          |
+| `maxQuota`          | number | Maksimum kontenjan                                                         | `100`                         |
+| `programName`       | string | Program adı (fuzzy matching)                                               | `bilgisayar mühendisliği`     |
+| `sortBy`            | string | Sıralama kriteri (`name`, `city`, `programCount`, `facultyCount`, `score`) | `name`                        |
+| `sortOrder`         | string | Sıralama yönü (`asc`, `desc`)                                              | `asc`                         |
 
 ### API Dokümantasyonu
 

@@ -672,7 +672,7 @@
             "description": "Sıralama kriteri",
             "schema": {
               "type": "string",
-              "enum": ["name", "city", "programCount", "facultyCount"],
+              "enum": ["name", "city", "programCount", "facultyCount", "score"],
               "example": "name"
             }
           },

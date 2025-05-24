@@ -141,7 +141,7 @@ Uygulama **[http://localhost:5173](http://localhost:5173)** adresinde çalışac
 - **📱 Katlanabilir Filtre Paneli**: Mobil uyumlu, görsel durum göstergeleri
 - **🎨 Renkli Filtre Etiketleri**: Her filtre türü için farklı renk kodlaması
 - **🔄 Gerçek Zamanlı Sonuçlar**: Anlık filtre uygulaması
-- **📊 Sıralama Seçenekleri**: Ad, şehir, program/fakülte sayısı
+- **📊 Sıralama Seçenekleri**: Ad, şehir, program/fakülte sayısı, puan (YÖK 2024)
 - **📱 Responsive Tasarım**: Mobil ve masaüstü optimizasyonu
 
 ## 🎨 Bileşen Mimarisi
