@@ -22,7 +22,6 @@ Bu proje, Türkiye'deki üniversiteler, fakülteler ve programlar hakkında deta
 - [🎯 Frontend Özellikleri](#-frontend-özellikleri)
 - [📈 Performans Metrikleri](#-performans-metrikleri)
 - [🔧 Geliştirme](#-geliştirme)
-- [🚀 Deployment](#-deployment)
 - [🤝 Katkıda Bulunma](#-katkıda-bulunma)
 - [📄 Lisans](#-lisans)
 - [⚠️ Bilgilendirme](#️-bilgilendirme)
