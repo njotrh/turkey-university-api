@@ -329,7 +329,7 @@ app.use("/docs", express.static(path.join(__dirname, "docs")));
 // JSON dosyasını oku - Enhanced data kullan
 const universitiesData: University[] = JSON.parse(
   fs.readFileSync(
-    path.join(process.cwd(), "../data/turkey-universities-enhanced.json"),
+    path.join(process.cwd(), "./data/turkey-universities-enhanced.json"),
     "utf-8"
   )
 );
