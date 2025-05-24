@@ -2,6 +2,7 @@ import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { useFavorites } from "../hooks/useFavorites";
 import { University } from "../types";
+import { getUniversityById } from "../services/api";
 
 interface FavoriteButtonProps {
   university: University;
@@ -16,7 +17,7 @@ const FavoriteButton = ({
   showText = false,
   className = "",
 }: FavoriteButtonProps) => {
-  const { isFavorite, toggleFavorite } = useFavorites();
+  const { isFavorite, addToFavorites, removeFromFavorites } = useFavorites();
   const isUniversityFavorite = isFavorite(university.id);
 
   const sizeClasses = {
@@ -31,10 +32,43 @@ const FavoriteButton = ({
     lg: "p-3",
   };
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleFavorite(university);
+
+    // Add a small animation effect
+    const button = e.currentTarget as HTMLButtonElement;
+    button.style.transform = "scale(0.95)";
+    setTimeout(() => {
+      button.style.transform = "scale(1)";
+    }, 150);
+
+    if (isUniversityFavorite) {
+      removeFromFavorites(university.id);
+    } else {
+      // Check if university data is complete (not empty strings)
+      const isDataComplete =
+        university.website &&
+        university.address &&
+        university.logo &&
+        university.website.trim() !== "" &&
+        university.address.trim() !== "" &&
+        university.logo.trim() !== "";
+
+      if (isDataComplete) {
+        addToFavorites(university);
+      } else {
+        // Fetch complete university data from API
+        try {
+          const completeUniversity = await getUniversityById(university.id);
+          addToFavorites(completeUniversity);
+        } catch (error) {
+          console.error("Error fetching complete university data:", error);
+          // Fallback: add with existing data
+          addToFavorites(university);
+        }
+      }
+    }
   };
 
   return (
@@ -47,7 +81,10 @@ const FavoriteButton = ({
             ? "text-red-500 hover:text-red-600"
             : "text-gray-400 hover:text-red-500"
         }
-        transition-colors duration-200
+        transition-all duration-200 ease-in-out
+        hover:scale-105 active:scale-95
+        focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50
+        rounded-lg
         ${className}
       `}
       title={isUniversityFavorite ? "Favorilerden çıkar" : "Favorilere ekle"}

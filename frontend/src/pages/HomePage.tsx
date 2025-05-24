@@ -11,6 +11,7 @@ import {
   AcademicCapIcon,
   BuildingLibraryIcon,
   MapPinIcon,
+  ChartBarIcon,
 } from "@heroicons/react/24/outline";
 
 const HomePage = () => {
@@ -229,7 +230,7 @@ const HomePage = () => {
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12 px-2 sm:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8 sm:mt-12 px-2 sm:px-0">
           <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
             <BuildingLibraryIcon className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 mx-auto mb-3 sm:mb-4" />
             <h3 className="text-lg sm:text-xl font-semibold mb-2">
@@ -264,7 +265,7 @@ const HomePage = () => {
             </button>
           </div>
 
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md sm:col-span-2 lg:col-span-1 sm:max-w-md sm:mx-auto lg:max-w-none">
+          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md">
             <MapPinIcon className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 mx-auto mb-3 sm:mb-4" />
             <h3 className="text-lg sm:text-xl font-semibold mb-2">
               Programlar
@@ -279,6 +280,22 @@ const HomePage = () => {
               className="text-blue-600 hover:text-blue-800 font-medium text-sm sm:text-base"
             >
               Programları Ara
+            </button>
+          </div>
+
+          <div className="bg-gradient-to-br from-purple-50 to-blue-50 p-4 sm:p-6 rounded-lg shadow-md border border-purple-200">
+            <ChartBarIcon className="w-10 h-10 sm:w-12 sm:h-12 text-purple-600 mx-auto mb-3 sm:mb-4" />
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 text-purple-900">
+              Gelişmiş Arama
+            </h3>
+            <p className="text-sm sm:text-base text-purple-700 mb-3 sm:mb-4">
+              YÖK 2024 verilerine dayalı filtreleme
+            </p>
+            <button
+              onClick={() => navigate("/enhanced-search")}
+              className="text-purple-600 hover:text-purple-800 font-medium text-sm sm:text-base"
+            >
+              Gelişmiş Aramayı Dene
             </button>
           </div>
         </div>

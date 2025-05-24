@@ -1,5 +1,15 @@
 import axios from "axios";
-import { University, SearchFacultyResult, SearchProgramResult } from "../types";
+import {
+  University,
+  SearchFacultyResult,
+  SearchProgramResult,
+  ScoreRangeSearchResult,
+  QuotaTypeSearchResult,
+  StatisticsResult,
+  AdvancedSearchFilters,
+  AdvancedSearchResult,
+  FilterOptions,
+} from "../types";
 
 const API_URL = "http://localhost:3000";
 
@@ -61,4 +71,94 @@ export const searchPrograms = async (
     params: { name },
   });
   return response.data.results;
+};
+
+// Enhanced API functions
+export const searchProgramsByScoreRange = async (
+  minScore: number,
+  maxScore: number,
+  scoreType?: string
+): Promise<ScoreRangeSearchResult> => {
+  const response = await axios.get<ScoreRangeSearchResult>(
+    `${API_URL}/api/programs/score-range`,
+    {
+      params: { minScore, maxScore, scoreType },
+    }
+  );
+  return response.data;
+};
+
+export const searchProgramsByQuotaType = async (
+  quotaType: string
+): Promise<QuotaTypeSearchResult> => {
+  const response = await axios.get<QuotaTypeSearchResult>(
+    `${API_URL}/api/programs/quota-type`,
+    {
+      params: { quotaType },
+    }
+  );
+  return response.data;
+};
+
+export const getStatistics = async (): Promise<StatisticsResult> => {
+  const response = await axios.get<StatisticsResult>(
+    `${API_URL}/api/statistics`
+  );
+  return response.data;
+};
+
+// Advanced search functions
+export const getFilterOptions = async (): Promise<FilterOptions> => {
+  const response = await axios.get<FilterOptions>(
+    `${API_URL}/api/search/filters`
+  );
+  return response.data;
+};
+
+export const advancedSearch = async (
+  filters: AdvancedSearchFilters
+): Promise<AdvancedSearchResult> => {
+  const params = new URLSearchParams();
+
+  if (filters.universityTypes?.length) {
+    params.append("universityTypes", filters.universityTypes.join(","));
+  }
+  if (filters.cities?.length) {
+    params.append("cities", filters.cities.join(","));
+  }
+  if (filters.programTypes?.length) {
+    params.append("programTypes", filters.programTypes.join(","));
+  }
+  if (filters.scoreTypes?.length) {
+    params.append("scoreTypes", filters.scoreTypes.join(","));
+  }
+  if (filters.facultyCategories?.length) {
+    params.append("facultyCategories", filters.facultyCategories.join(","));
+  }
+  if (filters.scoreRange?.min !== undefined) {
+    params.append("minScore", filters.scoreRange.min.toString());
+  }
+  if (filters.scoreRange?.max !== undefined) {
+    params.append("maxScore", filters.scoreRange.max.toString());
+  }
+  if (filters.quotaRange?.min !== undefined) {
+    params.append("minQuota", filters.quotaRange.min.toString());
+  }
+  if (filters.quotaRange?.max !== undefined) {
+    params.append("maxQuota", filters.quotaRange.max.toString());
+  }
+  if (filters.programName) {
+    params.append("programName", filters.programName);
+  }
+  if (filters.sortBy) {
+    params.append("sortBy", filters.sortBy);
+  }
+  if (filters.sortOrder) {
+    params.append("sortOrder", filters.sortOrder);
+  }
+
+  const response = await axios.get<AdvancedSearchResult>(
+    `${API_URL}/api/search/advanced?${params.toString()}`
+  );
+  return response.data;
 };

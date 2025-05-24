@@ -2,14 +2,20 @@ import { useState, useEffect } from "react";
 import { Faculty } from "../types";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 import Pagination from "./Pagination";
+import ProgramCard from "./ProgramCard";
 import { usePagination } from "../hooks/usePagination";
 
 interface FacultyListProps {
   faculties: Faculty[];
   itemsPerPage?: number;
+  showEnhancedData?: boolean;
 }
 
-const FacultyList = ({ faculties, itemsPerPage = 5 }: FacultyListProps) => {
+const FacultyList = ({
+  faculties,
+  itemsPerPage = 5,
+  showEnhancedData = true,
+}: FacultyListProps) => {
   const [expandedFaculties, setExpandedFaculties] = useState<number[]>([]);
 
   // Use pagination hook
@@ -69,7 +75,7 @@ const FacultyList = ({ faculties, itemsPerPage = 5 }: FacultyListProps) => {
 
                 {expandedFaculties.includes(faculty.id) && (
                   <div className="p-4 bg-white">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">
+                    <h4 className="text-sm font-medium text-gray-700 mb-3">
                       Programlar ({faculty.programs.length})
                     </h4>
 
@@ -78,11 +84,15 @@ const FacultyList = ({ faculties, itemsPerPage = 5 }: FacultyListProps) => {
                         Program bilgisi bulunamadı.
                       </p>
                     ) : (
-                      <ul className="list-disc list-inside space-y-1 text-sm text-gray-600">
+                      <div className="space-y-3">
                         {faculty.programs.map((program, index) => (
-                          <li key={index}>{program.name}</li>
+                          <ProgramCard
+                            key={index}
+                            program={program}
+                            showEnhancedData={showEnhancedData}
+                          />
                         ))}
-                      </ul>
+                      </div>
                     )}
                   </div>
                 )}

@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import UniversityListPage from "./pages/UniversityListPage";
 import UniversityDetailPage from "./pages/UniversityDetailPage";
 import SearchResultsPage from "./pages/SearchResultsPage";
+import EnhancedSearchPage from "./pages/EnhancedSearchPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import ComparisonPage from "./pages/ComparisonPage";
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/universities" element={<UniversityListPage />} />
           <Route path="/universities/:id" element={<UniversityDetailPage />} />
           <Route path="/search" element={<SearchResultsPage />} />
+          <Route path="/enhanced-search" element={<EnhancedSearchPage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/comparison" element={<ComparisonPage />} />
         </Routes>

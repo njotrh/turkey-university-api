@@ -2,13 +2,19 @@ import { useState } from "react";
 import { useFavorites } from "../hooks/useFavorites";
 import UniversityCard from "../components/UniversityCard";
 import ExportButton from "../components/ExportButton";
-import { HeartIcon, TrashIcon, FunnelIcon } from "@heroicons/react/24/outline";
+import {
+  HeartIcon,
+  TrashIcon,
+  FunnelIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 
 const FavoritesPage = () => {
   const { favorites, clearFavorites, getFavoritesCount } = useFavorites();
 
   const [filter, setFilter] = useState<"all" | "devlet" | "vakif">("all");
   const [cityFilter, setCityFilter] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Get unique cities from favorites
   const uniqueCities = Array.from(
@@ -27,7 +33,16 @@ const FavoritesPage = () => {
         .toLocaleLowerCase("tr-TR")
         .includes(cityFilter.toLocaleLowerCase("tr-TR"));
 
-    return matchesType && matchesCity;
+    const matchesSearch =
+      !searchQuery ||
+      university.name
+        .toLocaleLowerCase("tr-TR")
+        .includes(searchQuery.toLocaleLowerCase("tr-TR")) ||
+      university.city
+        .toLocaleLowerCase("tr-TR")
+        .includes(searchQuery.toLocaleLowerCase("tr-TR"));
+
+    return matchesType && matchesCity && matchesSearch;
   });
 
   if (favorites.length === 0) {
@@ -95,6 +110,25 @@ const FavoritesPage = () => {
           <span className="text-sm sm:text-base font-medium text-gray-700">
             Filtreler
           </span>
+        </div>
+
+        {/* Search Bar */}
+        <div className="mb-4">
+          <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+            Üniversite Ara
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <MagnifyingGlassIcon className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
+            </div>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Üniversite adı veya şehir ile ara..."
+              className="w-full pl-9 sm:pl-10 pr-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">

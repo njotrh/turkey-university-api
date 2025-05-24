@@ -2,8 +2,8 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Türkiye Üniversiteleri API",
-    "description": "Türkiye'deki üniversiteler hakkında fakülteleri ve programları da dahil olmak üzere kapsamlı bilgi sağlayan RESTful API servisi. v1.1.0 ile caching, rate limiting, compression ve gelişmiş hata yönetimi eklendi.",
-    "version": "1.1.0",
+    "description": "Türkiye'deki üniversiteler hakkında fakülteleri ve programları da dahil olmak üzere kapsamlı bilgi sağlayan RESTful API servisi. v2.0.0 ile YÖK 2024 veri entegrasyonu ve gelişmiş çoklu kriter arama sistemi eklendi.",
+    "version": "2.0.0",
     "contact": {
       "name": "API Desteği"
     }
@@ -26,6 +26,14 @@
     {
       "name": "Arama",
       "description": "Fakülte ve program arama işlemleri"
+    },
+    {
+      "name": "Gelişmiş Arama",
+      "description": "YÖK 2024 verili çoklu kriter arama sistemi"
+    },
+    {
+      "name": "İstatistikler",
+      "description": "Enhanced data istatistikleri ve puan aralığı aramaları"
     }
   ],
   "paths": {
@@ -72,6 +80,22 @@
                         "/api/search/program": {
                           "type": "string",
                           "example": "Program adına göre arama yapar (query: name)"
+                        },
+                        "/api/programs/score-range": {
+                          "type": "string",
+                          "example": "Puan aralığına göre program arama (query: minScore, maxScore, scoreType)"
+                        },
+                        "/api/search/advanced": {
+                          "type": "string",
+                          "example": "Gelişmiş çoklu kriter arama (query: multiple filters)"
+                        },
+                        "/api/search/filters": {
+                          "type": "string",
+                          "example": "Arama filtreleri için mevcut seçenekleri getirir"
+                        },
+                        "/api/statistics": {
+                          "type": "string",
+                          "example": "Enhanced data istatistikleri"
                         }
                       }
                     }
@@ -444,6 +468,239 @@
           }
         }
       }
+    },
+    "/api/programs/score-range": {
+      "get": {
+        "summary": "Puan Aralığına Göre Program Arama",
+        "description": "Belirtilen puan aralığı ve puan türüne göre programları arar",
+        "tags": ["İstatistikler"],
+        "parameters": [
+          {
+            "name": "minScore",
+            "in": "query",
+            "required": true,
+            "description": "Minimum puan",
+            "schema": {
+              "type": "number",
+              "example": 400
+            }
+          },
+          {
+            "name": "maxScore",
+            "in": "query",
+            "required": true,
+            "description": "Maksimum puan",
+            "schema": {
+              "type": "number",
+              "example": 500
+            }
+          },
+          {
+            "name": "scoreType",
+            "in": "query",
+            "required": true,
+            "description": "Puan türü",
+            "schema": {
+              "type": "string",
+              "enum": ["SAY", "EA", "SÖZ", "DİL", "TYT"],
+              "example": "SAY"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScoreRangeSearchResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/statistics": {
+      "get": {
+        "summary": "Enhanced Data İstatistikleri",
+        "description": "YÖK 2024 enhanced data istatistiklerini döndürür",
+        "tags": ["İstatistikler"],
+        "responses": {
+          "200": {
+            "description": "Başarılı",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatisticsResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search/filters": {
+      "get": {
+        "summary": "Filtre Seçeneklerini Getir",
+        "description": "Gelişmiş arama için mevcut filtre seçeneklerini döndürür",
+        "tags": ["Gelişmiş Arama"],
+        "responses": {
+          "200": {
+            "description": "Başarılı",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterOptions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/search/advanced": {
+      "get": {
+        "summary": "Gelişmiş Çoklu Kriter Arama",
+        "description": "Çoklu kriter kullanarak gelişmiş arama yapar",
+        "tags": ["Gelişmiş Arama"],
+        "parameters": [
+          {
+            "name": "universityTypes",
+            "in": "query",
+            "required": false,
+            "description": "Üniversite türleri (virgülle ayrılmış)",
+            "schema": {
+              "type": "string",
+              "example": "Devlet,Vakıf"
+            }
+          },
+          {
+            "name": "cities",
+            "in": "query",
+            "required": false,
+            "description": "Şehirler (virgülle ayrılmış)",
+            "schema": {
+              "type": "string",
+              "example": "İstanbul,Ankara,İzmir"
+            }
+          },
+          {
+            "name": "programTypes",
+            "in": "query",
+            "required": false,
+            "description": "Program türleri (virgülle ayrılmış)",
+            "schema": {
+              "type": "string",
+              "example": "lisans,önlisans"
+            }
+          },
+          {
+            "name": "scoreTypes",
+            "in": "query",
+            "required": false,
+            "description": "Puan türleri (virgülle ayrılmış)",
+            "schema": {
+              "type": "string",
+              "example": "SAY,EA,SÖZ"
+            }
+          },
+          {
+            "name": "facultyCategories",
+            "in": "query",
+            "required": false,
+            "description": "Fakülte kategorileri (virgülle ayrılmış)",
+            "schema": {
+              "type": "string",
+              "example": "engineering,medicine,social"
+            }
+          },
+          {
+            "name": "minScore",
+            "in": "query",
+            "required": false,
+            "description": "Minimum puan",
+            "schema": {
+              "type": "number",
+              "example": 400
+            }
+          },
+          {
+            "name": "maxScore",
+            "in": "query",
+            "required": false,
+            "description": "Maksimum puan",
+            "schema": {
+              "type": "number",
+              "example": 500
+            }
+          },
+          {
+            "name": "minQuota",
+            "in": "query",
+            "required": false,
+            "description": "Minimum kontenjan",
+            "schema": {
+              "type": "number",
+              "example": 10
+            }
+          },
+          {
+            "name": "maxQuota",
+            "in": "query",
+            "required": false,
+            "description": "Maksimum kontenjan",
+            "schema": {
+              "type": "number",
+              "example": 100
+            }
+          },
+          {
+            "name": "programName",
+            "in": "query",
+            "required": false,
+            "description": "Program adı (fuzzy matching)",
+            "schema": {
+              "type": "string",
+              "example": "bilgisayar mühendisliği"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "description": "Sıralama kriteri",
+            "schema": {
+              "type": "string",
+              "enum": ["name", "city", "programCount", "facultyCount"],
+              "example": "name"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "in": "query",
+            "required": false,
+            "description": "Sıralama yönü",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"],
+              "example": "asc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Başarılı",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdvancedSearchResult"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -454,6 +711,71 @@
           "name": {
             "type": "string",
             "example": "Bilgisayar Mühendisliği"
+          },
+          "yokData2024": {
+            "$ref": "#/components/schemas/YokData2024"
+          }
+        }
+      },
+      "YokData2024": {
+        "type": "object",
+        "properties": {
+          "programCode": {
+            "type": "string",
+            "example": "123456"
+          },
+          "scoreType": {
+            "type": "string",
+            "example": "SAY"
+          },
+          "programType": {
+            "type": "string",
+            "example": "lisans"
+          },
+          "quota": {
+            "type": "object",
+            "properties": {
+              "general": {
+                "$ref": "#/components/schemas/QuotaInfo"
+              },
+              "schoolFirst": {
+                "$ref": "#/components/schemas/QuotaInfo"
+              },
+              "earthquake": {
+                "$ref": "#/components/schemas/QuotaInfo"
+              },
+              "womenOver34": {
+                "$ref": "#/components/schemas/QuotaInfo"
+              },
+              "veteran": {
+                "$ref": "#/components/schemas/QuotaInfo"
+              }
+            }
+          }
+        }
+      },
+      "QuotaInfo": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "number",
+            "nullable": true,
+            "example": 50
+          },
+          "placed": {
+            "type": "number",
+            "nullable": true,
+            "example": 50
+          },
+          "minScore": {
+            "type": "number",
+            "nullable": true,
+            "example": 485.5
+          },
+          "maxScore": {
+            "type": "number",
+            "nullable": true,
+            "example": 520.3
           }
         }
       },
@@ -581,6 +903,240 @@
                   }
                 }
               }
+            }
+          }
+        }
+      },
+      "ScoreRangeSearchResult": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 25
+          },
+          "scoreRange": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "number",
+                "example": 400
+              },
+              "max": {
+                "type": "number",
+                "example": 500
+              }
+            }
+          },
+          "scoreType": {
+            "type": "string",
+            "example": "SAY"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchProgramResult"
+            }
+          }
+        }
+      },
+      "StatisticsResult": {
+        "type": "object",
+        "properties": {
+          "universities": {
+            "type": "integer",
+            "example": 207
+          },
+          "totalPrograms": {
+            "type": "integer",
+            "example": 15000
+          },
+          "programsWithEnhancedData": {
+            "type": "integer",
+            "example": 8500
+          },
+          "enhancedDataCoverage": {
+            "type": "string",
+            "example": "56.7%"
+          },
+          "scoreTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["SAY", "EA", "SÖZ", "DİL", "TYT"]
+          },
+          "programTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["lisans", "önlisans"]
+          },
+          "totalQuota": {
+            "type": "integer",
+            "example": 750000
+          },
+          "totalPlaced": {
+            "type": "integer",
+            "example": 680000
+          },
+          "placementRate": {
+            "type": "string",
+            "example": "90.7%"
+          }
+        }
+      },
+      "FilterOptions": {
+        "type": "object",
+        "properties": {
+          "cities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["Adana", "Adıyaman", "Afyonkarahisar"]
+          },
+          "scoreTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["SAY", "EA", "SÖZ", "DİL", "TYT"]
+          },
+          "programTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["lisans", "önlisans"]
+          },
+          "universityTypes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["Devlet", "Vakıf"]
+          },
+          "facultyCategories": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "engineering"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Mühendislik"
+                },
+                "count": {
+                  "type": "integer",
+                  "example": 45
+                }
+              }
+            }
+          },
+          "totalUniversities": {
+            "type": "integer",
+            "example": 207
+          },
+          "totalCities": {
+            "type": "integer",
+            "example": 81
+          }
+        }
+      },
+      "AdvancedSearchResult": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "example": 25
+          },
+          "filters": {
+            "type": "object",
+            "properties": {
+              "universityTypes": {
+                "type": "string",
+                "nullable": true,
+                "example": "Devlet"
+              },
+              "cities": {
+                "type": "string",
+                "nullable": true,
+                "example": "İstanbul,Ankara"
+              },
+              "programTypes": {
+                "type": "string",
+                "nullable": true,
+                "example": null
+              },
+              "scoreTypes": {
+                "type": "string",
+                "nullable": true,
+                "example": "SAY"
+              },
+              "facultyCategories": {
+                "type": "string",
+                "nullable": true,
+                "example": "engineering"
+              },
+              "scoreRange": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": "400"
+                  },
+                  "max": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": null
+                  }
+                }
+              },
+              "quotaRange": {
+                "type": "object",
+                "properties": {
+                  "min": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": null
+                  },
+                  "max": {
+                    "type": "string",
+                    "nullable": true,
+                    "example": null
+                  }
+                }
+              },
+              "programName": {
+                "type": "string",
+                "nullable": true,
+                "example": null
+              }
+            }
+          },
+          "sorting": {
+            "type": "object",
+            "properties": {
+              "sortBy": {
+                "type": "string",
+                "nullable": true,
+                "example": "name"
+              },
+              "sortOrder": {
+                "type": "string",
+                "example": "asc"
+              }
+            }
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SearchProgramResult"
             }
           }
         }

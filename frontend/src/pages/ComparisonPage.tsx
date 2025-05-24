@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { getUniversityById } from "../services/api";
-import { University } from "../types";
+import { University, Program } from "../types";
 import {
   GlobeAltIcon,
   MapPinIcon,
@@ -24,6 +24,9 @@ const ComparisonPage = () => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [currentScrollPosition, setCurrentScrollPosition] = useState(0);
+  const [selectedProgram, setSelectedProgram] = useState<string>("");
+  const [commonPrograms, setCommonPrograms] = useState<string[]>([]);
+  const [showProgramComparison, setShowProgramComparison] = useState(false);
   const tableScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -62,6 +65,23 @@ const ComparisonPage = () => {
         const loadedUniversities = await Promise.all(universityPromises);
 
         setUniversities(loadedUniversities);
+
+        // Find common programs across all universities
+        const allPrograms = loadedUniversities.map((uni) =>
+          uni.faculties.flatMap((faculty) =>
+            faculty.programs.map((program) => program.name.toLowerCase().trim())
+          )
+        );
+
+        if (allPrograms.length > 0) {
+          const common = allPrograms[0].filter((program) =>
+            allPrograms.every((uniPrograms) => uniPrograms.includes(program))
+          );
+
+          // Remove duplicates and sort
+          const uniqueCommon = [...new Set(common)].sort();
+          setCommonPrograms(uniqueCommon);
+        }
       } catch (err) {
         console.error("Error loading universities for comparison:", err);
         setError("Üniversite bilgileri yüklenirken bir hata oluştu.");
@@ -114,6 +134,40 @@ const ComparisonPage = () => {
     if (tableScrollRef.current) {
       tableScrollRef.current.scrollBy({ left: 200, behavior: "smooth" });
     }
+  };
+
+  // Handle program selection for comparison
+  const handleProgramSelection = (programName: string) => {
+    setSelectedProgram(programName);
+    setShowProgramComparison(true);
+  };
+
+  // Get program data for a specific university
+  const getProgramDataForUniversity = (
+    university: University,
+    programName: string
+  ): Program | null => {
+    for (const faculty of university.faculties) {
+      const program = faculty.programs.find(
+        (p) => p.name.toLowerCase().trim() === programName.toLowerCase().trim()
+      );
+      if (program) return program;
+    }
+    return null;
+  };
+
+  // Get faculty name for a program in a university
+  const getFacultyNameForProgram = (
+    university: University,
+    programName: string
+  ): string => {
+    for (const faculty of university.faculties) {
+      const hasProgram = faculty.programs.some(
+        (p) => p.name.toLowerCase().trim() === programName.toLowerCase().trim()
+      );
+      if (hasProgram) return faculty.name;
+    }
+    return "Bilinmiyor";
   };
 
   if (loading) {
@@ -571,6 +625,259 @@ const ComparisonPage = () => {
             </div>
           </div>
         </>
+      )}
+
+      {/* Program Comparison Section */}
+      {commonPrograms.length > 0 && (
+        <div className="mt-6 sm:mt-8 bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="px-4 sm:px-6 py-3 sm:py-4 bg-gray-50 border-b border-gray-200">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900">
+              Program Karşılaştırması
+            </h2>
+            <p className="text-sm text-gray-600 mt-1">
+              Ortak programları karşılaştırarak YÖK 2024 verilerini inceleyin
+            </p>
+          </div>
+
+          <div className="p-4 sm:p-6">
+            {/* Program Selection */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Karşılaştırılacak Programı Seçin ({commonPrograms.length} ortak
+                program)
+              </label>
+              <select
+                value={selectedProgram}
+                onChange={(e) => handleProgramSelection(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Program seçiniz...</option>
+                {commonPrograms.map((program, index) => (
+                  <option key={index} value={program}>
+                    {program.charAt(0).toUpperCase() + program.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Program Comparison Results */}
+            {showProgramComparison && selectedProgram && (
+              <div className="space-y-6">
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <h3 className="font-semibold text-blue-900 mb-2">
+                    {selectedProgram.charAt(0).toUpperCase() +
+                      selectedProgram.slice(1)}{" "}
+                    - Program Karşılaştırması
+                  </h3>
+                  <p className="text-sm text-blue-700">
+                    Seçilen program için üniversiteler arası YÖK 2024
+                    verilerinin karşılaştırması
+                  </p>
+                </div>
+
+                {/* Comparison Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {universities.map((university) => {
+                    const programData = getProgramDataForUniversity(
+                      university,
+                      selectedProgram
+                    );
+                    const facultyName = getFacultyNameForProgram(
+                      university,
+                      selectedProgram
+                    );
+
+                    return (
+                      <div
+                        key={university.id}
+                        className="border border-gray-200 rounded-lg p-4"
+                      >
+                        {/* University Header */}
+                        <div className="flex items-center space-x-3 mb-4">
+                          {university.logo ? (
+                            <img
+                              src={university.logo}
+                              alt={`${university.name} Logo`}
+                              className="w-8 h-8 object-contain flex-shrink-0"
+                            />
+                          ) : (
+                            <div className="w-8 h-8 bg-gray-200 flex items-center justify-center rounded-full flex-shrink-0">
+                              <BuildingLibraryIcon className="w-5 h-5 text-gray-500" />
+                            </div>
+                          )}
+                          <div>
+                            <h4 className="font-semibold text-gray-900 text-sm">
+                              {university.name}
+                            </h4>
+                            <p className="text-xs text-gray-500">
+                              {facultyName}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Program Data */}
+                        {programData?.yokData2024 ? (
+                          <div className="space-y-3">
+                            {/* Program Type and Score Type */}
+                            <div className="flex gap-2">
+                              <span
+                                className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  programData.yokData2024.programType ===
+                                  "lisans"
+                                    ? "bg-blue-100 text-blue-800"
+                                    : "bg-green-100 text-green-800"
+                                }`}
+                              >
+                                {programData.yokData2024.programType ===
+                                "lisans"
+                                  ? "Lisans"
+                                  : "Önlisans"}
+                              </span>
+                              <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                {programData.yokData2024.scoreType}
+                              </span>
+                            </div>
+
+                            {/* Program Code */}
+                            <div className="text-sm">
+                              <span className="text-gray-600">
+                                Program Kodu:
+                              </span>
+                              <span className="ml-2 font-medium">
+                                {programData.yokData2024.programCode}
+                              </span>
+                            </div>
+
+                            {/* General Quota Info */}
+                            {programData.yokData2024.quota.general.total && (
+                              <div className="bg-gray-50 rounded-lg p-3">
+                                <h5 className="font-medium text-sm mb-2">
+                                  Genel Kontenjan
+                                </h5>
+                                <div className="grid grid-cols-2 gap-2 text-xs">
+                                  <div>
+                                    <span className="text-gray-600">
+                                      Kontenjan:
+                                    </span>
+                                    <span className="ml-1 font-medium">
+                                      {
+                                        programData.yokData2024.quota.general
+                                          .total
+                                      }
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-gray-600">
+                                      Yerleşen:
+                                    </span>
+                                    <span className="ml-1 font-medium">
+                                      {programData.yokData2024.quota.general
+                                        .placed || 0}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-gray-600">
+                                      Min Puan:
+                                    </span>
+                                    <span className="ml-1 font-medium">
+                                      {programData.yokData2024.quota.general.minScore?.toFixed(
+                                        2
+                                      ) || "N/A"}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-gray-600">
+                                      Max Puan:
+                                    </span>
+                                    <span className="ml-1 font-medium">
+                                      {programData.yokData2024.quota.general.maxScore?.toFixed(
+                                        2
+                                      ) || "N/A"}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Special Quotas */}
+                            <div className="space-y-1">
+                              {programData.yokData2024.quota.schoolFirst
+                                .total &&
+                                programData.yokData2024.quota.schoolFirst
+                                  .total > 0 && (
+                                  <div className="flex justify-between text-xs bg-blue-50 px-2 py-1 rounded">
+                                    <span className="text-blue-700">
+                                      Okul Birincisi
+                                    </span>
+                                    <span className="font-medium">
+                                      {
+                                        programData.yokData2024.quota
+                                          .schoolFirst.total
+                                      }
+                                    </span>
+                                  </div>
+                                )}
+                              {programData.yokData2024.quota.womenOver34
+                                .total &&
+                                programData.yokData2024.quota.womenOver34
+                                  .total > 0 && (
+                                  <div className="flex justify-between text-xs bg-pink-50 px-2 py-1 rounded">
+                                    <span className="text-pink-700">
+                                      34+ Yaş Kadın
+                                    </span>
+                                    <span className="font-medium">
+                                      {
+                                        programData.yokData2024.quota
+                                          .womenOver34.total
+                                      }
+                                    </span>
+                                  </div>
+                                )}
+                              {programData.yokData2024.quota.earthquake.total &&
+                                programData.yokData2024.quota.earthquake.total >
+                                  0 && (
+                                  <div className="flex justify-between text-xs bg-red-50 px-2 py-1 rounded">
+                                    <span className="text-red-700">Deprem</span>
+                                    <span className="font-medium">
+                                      {
+                                        programData.yokData2024.quota.earthquake
+                                          .total
+                                      }
+                                    </span>
+                                  </div>
+                                )}
+                              {programData.yokData2024.quota.veteran.total &&
+                                programData.yokData2024.quota.veteran.total >
+                                  0 && (
+                                  <div className="flex justify-between text-xs bg-green-50 px-2 py-1 rounded">
+                                    <span className="text-green-700">
+                                      Gazi/Şehit
+                                    </span>
+                                    <span className="font-medium">
+                                      {
+                                        programData.yokData2024.quota.veteran
+                                          .total
+                                      }
+                                    </span>
+                                  </div>
+                                )}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-center py-4">
+                            <p className="text-sm text-gray-500">
+                              Bu program için YÖK 2024 verisi bulunmamaktadır.
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Detailed Faculty Comparison */}

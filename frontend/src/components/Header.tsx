@@ -50,6 +50,14 @@ const Header = () => {
             </li>
             <li>
               <Link
+                to="/enhanced-search"
+                className="hover:text-blue-200 transition-colors"
+              >
+                Gelişmiş Arama
+              </Link>
+            </li>
+            <li>
+              <Link
                 to="/favorites"
                 className="hover:text-blue-200 transition-colors flex items-center gap-1"
               >
@@ -109,6 +117,15 @@ const Header = () => {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Arama
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/enhanced-search"
+                  className="block py-2 hover:text-blue-200 transition-colors"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Gelişmiş Arama
                 </Link>
               </li>
               <li>

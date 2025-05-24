@@ -5,9 +5,31 @@ import fs from "fs";
 import path from "path";
 import { createHash } from "crypto";
 
-// Veri tiplerini tanımlayalım
+// Enhanced data types for YÖK 2024 data
+interface QuotaDetails {
+  total: number | null;
+  placed: number | null;
+  minScore: number | null;
+  maxScore: number | null;
+}
+
+interface YokData2024 {
+  programCode: string;
+  scoreType: string;
+  programType: string;
+  quota: {
+    general: QuotaDetails;
+    schoolFirst: QuotaDetails;
+    earthquake: QuotaDetails;
+    womenOver34: QuotaDetails;
+    veteran: QuotaDetails;
+  };
+}
+
+// Enhanced Program interface with optional YÖK data for backward compatibility
 interface Program {
   name: string;
+  yokData2024?: YokData2024;
 }
 
 interface Faculty {
@@ -304,16 +326,16 @@ app.use(requestLogger);
 app.use(rateLimitMiddleware);
 app.use("/docs", express.static(path.join(__dirname, "docs")));
 
-// JSON dosyasını oku
+// JSON dosyasını oku - Enhanced data kullan
 const universitiesData: University[] = JSON.parse(
   fs.readFileSync(
-    path.join(process.cwd(), "../data/turkey-universities.json"),
+    path.join(process.cwd(), "../data/turkey-universities-enhanced.json"),
     "utf-8"
   )
 );
 
 // Health check endpoint
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
   res.json({
     status: "healthy",
     timestamp: new Date().toISOString(),
@@ -329,21 +351,31 @@ app.get("/health", (req, res) => {
 });
 
 // Ana sayfa
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.json({
-    message: "Türkiye Üniversiteleri API",
-    version: "1.1.0",
+    message: "Türkiye Üniversiteleri API - Enhanced Version",
+    version: "2.0.0",
     endpoints: {
       "/health": "Sistem durumu kontrolü",
-      "/api/universities": "Tüm üniversiteleri listeler",
+      "/api/universities": "Tüm üniversiteleri listeler (enhanced data ile)",
       "/api/universities/:id": "ID'ye göre üniversite getirir",
       "/api/universities/city/:city": "Şehre göre üniversiteleri filtreler",
       "/api/universities/type/:type":
         "Türe göre üniversiteleri filtreler (Devlet/Vakıf)",
       "/api/search/faculty": "Fakülte adına göre arama yapar (query: name)",
       "/api/search/program": "Program adına göre arama yapar (query: name)",
+      "/api/programs/score-range":
+        "Puan aralığına göre program arama (query: minScore, maxScore, scoreType)",
+      "/api/search/advanced":
+        "Gelişmiş çoklu kriter arama (query: multiple filters)",
+      "/api/search/filters": "Arama filtreleri için mevcut seçenekleri getirir",
+      "/api/statistics": "Enhanced data istatistikleri",
     },
     features: [
+      "Enhanced YÖK 2024 data",
+      "Score range filtering",
+      "Quota type filtering",
+      "Statistical analysis",
       "In-memory caching",
       "Rate limiting",
       "Request logging",
@@ -354,7 +386,7 @@ app.get("/", (req, res) => {
 });
 
 // Tüm üniversiteleri getir (with caching)
-app.get("/api/universities", cacheMiddleware(10 * 60 * 1000), (req, res) => {
+app.get("/api/universities", cacheMiddleware(10 * 60 * 1000), (_req, res) => {
   res.json(universitiesData);
 });
 
@@ -559,13 +591,465 @@ app.get(
   }
 );
 
+// Enhanced data endpoints
+
+// Get programs by score range
+app.get(
+  "/api/programs/score-range",
+  cacheMiddleware(5 * 60 * 1000),
+  (req, res) => {
+    const { minScore, maxScore, scoreType } = req.query;
+
+    if (!minScore || !maxScore) {
+      return res.status(400).json({
+        error: "Eksik parametreler",
+        message: "minScore ve maxScore parametreleri gereklidir",
+      });
+    }
+
+    const min = parseFloat(minScore as string);
+    const max = parseFloat(maxScore as string);
+
+    if (isNaN(min) || isNaN(max) || min < 0 || max < 0 || min > max) {
+      return res.status(400).json({
+        error: "Geçersiz puan aralığı",
+        message: "Geçerli bir puan aralığı belirtiniz",
+      });
+    }
+
+    const results = universitiesData
+      .map((uni) => {
+        const matchingFaculties = uni.faculties
+          .map((faculty) => {
+            const matchingPrograms = faculty.programs.filter((program) => {
+              if (!program.yokData2024) return false;
+
+              const data = program.yokData2024;
+              if (scoreType && data.scoreType !== scoreType) return false;
+
+              const generalQuota = data.quota.general;
+              if (!generalQuota.minScore || !generalQuota.maxScore)
+                return false;
+
+              return (
+                generalQuota.minScore >= min && generalQuota.maxScore <= max
+              );
+            });
+
+            if (matchingPrograms.length > 0) {
+              return {
+                id: faculty.id,
+                name: faculty.name,
+                programs: matchingPrograms,
+              };
+            }
+            return null;
+          })
+          .filter(Boolean);
+
+        if (matchingFaculties.length > 0) {
+          return {
+            id: uni.id,
+            name: uni.name,
+            city: uni.city,
+            type: uni.type,
+            website: uni.website,
+            faculties: matchingFaculties,
+          };
+        }
+        return null;
+      })
+      .filter(Boolean);
+
+    res.json({
+      count: results.length,
+      scoreRange: { min, max },
+      scoreType: scoreType || "all",
+      results,
+    });
+  }
+);
+
+// Advanced multi-criteria search
+app.get("/api/search/advanced", cacheMiddleware(5 * 60 * 1000), (req, res) => {
+  const {
+    universityTypes,
+    cities,
+    programTypes,
+    scoreTypes,
+    facultyCategories,
+    minScore,
+    maxScore,
+    programName,
+    minQuota,
+    maxQuota,
+    sortBy,
+    sortOrder,
+  } = req.query;
+
+  let results = universitiesData.map((uni) => ({ ...uni }));
+
+  // Filter by university type
+  if (universityTypes) {
+    const types = (universityTypes as string)
+      .split(",")
+      .map((t) => t.trim().toLowerCase());
+    results = results.filter((uni) =>
+      types.some((type) => uni.type.toLowerCase().includes(type))
+    );
+  }
+
+  // Filter by cities
+  if (cities) {
+    const cityList = (cities as string)
+      .split(",")
+      .map((c) => c.trim().toLowerCase());
+    results = results.filter((uni) =>
+      cityList.some((city) => uni.city.toLowerCase().includes(city))
+    );
+  }
+
+  // Filter and process programs
+  results = results
+    .map((uni) => {
+      const filteredFaculties = uni.faculties
+        .map((faculty) => {
+          let filteredPrograms = faculty.programs.filter((program) => {
+            // Program name filter
+            if (
+              programName &&
+              !program.name
+                .toLowerCase()
+                .includes((programName as string).toLowerCase())
+            ) {
+              return false;
+            }
+
+            if (!program.yokData2024) return true; // Include programs without enhanced data
+
+            // Program type filter
+            if (programTypes) {
+              const types = (programTypes as string)
+                .split(",")
+                .map((t) => t.trim().toLowerCase());
+              if (
+                !types.includes(program.yokData2024.programType.toLowerCase())
+              ) {
+                return false;
+              }
+            }
+
+            // Score type filter
+            if (scoreTypes) {
+              const types = (scoreTypes as string)
+                .split(",")
+                .map((t) => t.trim().toUpperCase());
+              if (
+                !types.includes(program.yokData2024.scoreType.toUpperCase())
+              ) {
+                return false;
+              }
+            }
+
+            // Score range filter
+            if (minScore || maxScore) {
+              const generalQuota = program.yokData2024.quota.general;
+              if (
+                generalQuota.minScore !== null &&
+                generalQuota.maxScore !== null
+              ) {
+                if (
+                  minScore &&
+                  generalQuota.maxScore < parseFloat(minScore as string)
+                )
+                  return false;
+                if (
+                  maxScore &&
+                  generalQuota.minScore > parseFloat(maxScore as string)
+                )
+                  return false;
+              }
+            }
+
+            // Quota range filter
+            if (minQuota || maxQuota) {
+              const totalQuota = program.yokData2024.quota.general.total;
+              if (totalQuota !== null) {
+                if (minQuota && totalQuota < parseInt(minQuota as string))
+                  return false;
+                if (maxQuota && totalQuota > parseInt(maxQuota as string))
+                  return false;
+              }
+            }
+
+            return true;
+          });
+
+          return filteredPrograms.length > 0
+            ? {
+                ...faculty,
+                programs: filteredPrograms,
+              }
+            : null;
+        })
+        .filter((faculty): faculty is Faculty => faculty !== null);
+
+      return filteredFaculties.length > 0
+        ? {
+            ...uni,
+            faculties: filteredFaculties,
+          }
+        : null;
+    })
+    .filter((uni): uni is University => uni !== null);
+
+  // Faculty category filter
+  if (facultyCategories) {
+    const categories = (facultyCategories as string)
+      .split(",")
+      .map((c) => c.trim().toLowerCase());
+    results = results
+      .map((uni) => {
+        const filteredFaculties = uni.faculties.filter((faculty) => {
+          return categories.some((category) => {
+            const facultyName = faculty.name.toLowerCase();
+            switch (category) {
+              case "engineering":
+                return (
+                  facultyName.includes("mühendislik") ||
+                  facultyName.includes("teknik")
+                );
+              case "medicine":
+                return (
+                  facultyName.includes("tıp") || facultyName.includes("sağlık")
+                );
+              case "social":
+                return (
+                  facultyName.includes("sosyal") ||
+                  facultyName.includes("edebiyat") ||
+                  facultyName.includes("iktisadi")
+                );
+              case "science":
+                return (
+                  facultyName.includes("fen") || facultyName.includes("bilim")
+                );
+              case "education":
+                return (
+                  facultyName.includes("eğitim") ||
+                  facultyName.includes("öğretmen")
+                );
+              case "law":
+                return facultyName.includes("hukuk");
+              case "business":
+                return (
+                  facultyName.includes("işletme") ||
+                  facultyName.includes("ticaret")
+                );
+              default:
+                return false;
+            }
+          });
+        });
+
+        return filteredFaculties.length > 0
+          ? {
+              ...uni,
+              faculties: filteredFaculties,
+            }
+          : null;
+      })
+      .filter((uni): uni is University => uni !== null);
+  }
+
+  // Sorting
+  if (sortBy) {
+    results.sort((a, b) => {
+      let aValue: string | number;
+      let bValue: string | number;
+
+      switch (sortBy) {
+        case "name":
+          aValue = a.name;
+          bValue = b.name;
+          break;
+        case "city":
+          aValue = a.city;
+          bValue = b.city;
+          break;
+        case "programCount":
+          aValue = a.faculties.reduce((sum, f) => sum + f.programs.length, 0);
+          bValue = b.faculties.reduce((sum, f) => sum + f.programs.length, 0);
+          break;
+        case "facultyCount":
+          aValue = a.faculties.length;
+          bValue = b.faculties.length;
+          break;
+        default:
+          return 0;
+      }
+
+      if (typeof aValue === "string" && typeof bValue === "string") {
+        return sortOrder === "desc"
+          ? bValue.localeCompare(aValue)
+          : aValue.localeCompare(bValue);
+      } else if (typeof aValue === "number" && typeof bValue === "number") {
+        return sortOrder === "desc" ? bValue - aValue : aValue - bValue;
+      }
+      return 0;
+    });
+  }
+
+  res.json({
+    count: results.length,
+    filters: {
+      universityTypes: universityTypes || null,
+      cities: cities || null,
+      programTypes: programTypes || null,
+      scoreTypes: scoreTypes || null,
+      facultyCategories: facultyCategories || null,
+      scoreRange: { min: minScore || null, max: maxScore || null },
+      quotaRange: { min: minQuota || null, max: maxQuota || null },
+      programName: programName || null,
+    },
+    sorting: {
+      sortBy: sortBy || null,
+      sortOrder: sortOrder || "asc",
+    },
+    results,
+  });
+});
+
+// Get filter options for advanced search
+app.get("/api/search/filters", cacheMiddleware(10 * 60 * 1000), (_req, res) => {
+  const cities = new Set<string>();
+  const scoreTypes = new Set<string>();
+  const programTypes = new Set<string>();
+  const universityTypes = new Set<string>();
+  const facultyNames = new Set<string>();
+
+  universitiesData.forEach((uni) => {
+    cities.add(uni.city);
+    universityTypes.add(uni.type);
+
+    uni.faculties.forEach((faculty) => {
+      facultyNames.add(faculty.name);
+
+      faculty.programs.forEach((program) => {
+        if (program.yokData2024) {
+          scoreTypes.add(program.yokData2024.scoreType);
+          programTypes.add(program.yokData2024.programType);
+        }
+      });
+    });
+  });
+
+  // Faculty categories based on common patterns
+  const facultyCategories = [
+    { id: "engineering", name: "Mühendislik", count: 0 },
+    { id: "medicine", name: "Tıp ve Sağlık", count: 0 },
+    { id: "social", name: "Sosyal Bilimler", count: 0 },
+    { id: "science", name: "Fen Bilimleri", count: 0 },
+    { id: "education", name: "Eğitim", count: 0 },
+    { id: "law", name: "Hukuk", count: 0 },
+    { id: "business", name: "İşletme ve Ticaret", count: 0 },
+  ];
+
+  // Count faculties in each category
+  facultyNames.forEach((facultyName) => {
+    const name = facultyName.toLowerCase();
+    if (name.includes("mühendislik") || name.includes("teknik")) {
+      facultyCategories[0]!.count++;
+    }
+    if (name.includes("tıp") || name.includes("sağlık")) {
+      facultyCategories[1]!.count++;
+    }
+    if (
+      name.includes("sosyal") ||
+      name.includes("edebiyat") ||
+      name.includes("iktisadi")
+    ) {
+      facultyCategories[2]!.count++;
+    }
+    if (name.includes("fen") || name.includes("bilim")) {
+      facultyCategories[3]!.count++;
+    }
+    if (name.includes("eğitim") || name.includes("öğretmen")) {
+      facultyCategories[4]!.count++;
+    }
+    if (name.includes("hukuk")) {
+      facultyCategories[5]!.count++;
+    }
+    if (name.includes("işletme") || name.includes("ticaret")) {
+      facultyCategories[6]!.count++;
+    }
+  });
+
+  res.json({
+    cities: Array.from(cities).sort(),
+    scoreTypes: Array.from(scoreTypes).sort(),
+    programTypes: Array.from(programTypes).sort(),
+    universityTypes: Array.from(universityTypes).sort(),
+    facultyCategories: facultyCategories.filter((cat) => cat.count > 0),
+    totalUniversities: universitiesData.length,
+    totalCities: cities.size,
+  });
+});
+
+// Get statistics for enhanced data
+app.get("/api/statistics", cacheMiddleware(10 * 60 * 1000), (_req, res) => {
+  let totalPrograms = 0;
+  let programsWithData = 0;
+  let scoreTypes = new Set<string>();
+  let programTypes = new Set<string>();
+  let totalQuota = 0;
+  let totalPlaced = 0;
+
+  universitiesData.forEach((uni) => {
+    uni.faculties.forEach((faculty) => {
+      faculty.programs.forEach((program) => {
+        totalPrograms++;
+
+        if (program.yokData2024) {
+          programsWithData++;
+          scoreTypes.add(program.yokData2024.scoreType);
+          programTypes.add(program.yokData2024.programType);
+
+          if (program.yokData2024.quota.general.total) {
+            totalQuota += program.yokData2024.quota.general.total;
+          }
+          if (program.yokData2024.quota.general.placed) {
+            totalPlaced += program.yokData2024.quota.general.placed;
+          }
+        }
+      });
+    });
+  });
+
+  res.json({
+    universities: universitiesData.length,
+    totalPrograms,
+    programsWithEnhancedData: programsWithData,
+    enhancedDataCoverage: `${((programsWithData / totalPrograms) * 100).toFixed(
+      1
+    )}%`,
+    scoreTypes: Array.from(scoreTypes),
+    programTypes: Array.from(programTypes),
+    totalQuota,
+    totalPlaced,
+    placementRate:
+      totalQuota > 0
+        ? `${((totalPlaced / totalQuota) * 100).toFixed(1)}%`
+        : "0%",
+  });
+});
+
 // Global error handler
 app.use(
   (
     err: Error,
-    req: express.Request,
+    _req: express.Request,
     res: express.Response,
-    next: express.NextFunction
+    _next: express.NextFunction
   ) => {
     console.error(`[${new Date().toISOString()}] Error:`, err);
 
@@ -591,6 +1075,10 @@ app.use((req: express.Request, res: express.Response) => {
       "GET /api/universities/type/:type",
       "GET /api/search/faculty?name=...",
       "GET /api/search/program?name=...",
+      "GET /api/programs/score-range?minScore=...&maxScore=...&scoreType=...",
+      "GET /api/search/advanced?universityTypes=...&cities=...&programTypes=...",
+      "GET /api/search/filters",
+      "GET /api/statistics",
     ],
   });
 });

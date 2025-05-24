@@ -11,7 +11,17 @@ Türkiye Üniversiteleri API Projesi, iki ana bileşenden oluşur:
 
 Proje, Türkiye'deki üniversiteler, fakülteler ve programlar hakkında bilgi sağlar. Kullanıcılar, üniversiteleri şehre veya türe (Devlet/Vakıf) göre filtreleyebilir, belirli bir üniversite hakkında detaylı bilgi alabilir ve fakülte veya program adına göre arama yapabilir.
 
-## ✨ Yeni Özellikler (v1.1.0)
+## ✨ Yeni Özellikler (v2.0.0)
+
+### 🔍 Kapsamlı Gelişmiş Arama Sistemi:
+
+- **🎯 Çoklu Kriter Filtreleme**: Üniversite türü, şehir, program türü, puan türü ve fakülte kategorilerine göre filtreleme
+- **📊 YÖK 2024 Veri Entegrasyonu**: Güncel YÖK verilerine dayalı puan aralıkları ve kontenjan bilgileri
+- **🔢 Sayısal Filtreler**: Puan aralığı (min/max) ve kontenjan aralığı (min/max) filtreleme
+- **📝 Akıllı Metin Arama**: Program adlarında fuzzy matching ile gelişmiş arama
+- **🏷️ Fakülte Kategorileri**: Mühendislik, Tıp, Sosyal Bilimler, Fen Bilimleri, Eğitim, Hukuk, İşletme kategorileri
+- **⚡ Gerçek Zamanlı Sonuçlar**: Filtreler uygulandıkça anlık sonuç güncellemeleri
+- **📱 Responsive Tasarım**: Mobil uyumlu katlanabilir filtre paneli
 
 ### Backend İyileştirmeleri:
 
@@ -22,6 +32,16 @@ Proje, Türkiye'deki üniversiteler, fakülteler ve programlar hakkında bilgi s
 - **📊 Request Logging**: Detaylı performans ve kullanım logları
 - **💚 Health Check**: Sistem durumu izleme endpoint'i (`/health`)
 - **🛡️ Enhanced Error Handling**: Kullanıcı dostu hata mesajları
+- **🔍 Gelişmiş Arama API'leri**: Yeni `/api/search/advanced` ve `/api/search/filters` endpoint'leri
+
+### Frontend Yenilikleri:
+
+- **🎨 Yeniden Tasarlanan Gelişmiş Arama Sayfası**: Modern React bileşen mimarisi
+- **🎛️ Etkileşimli Filtre Paneli**: Katlanabilir, görsel durum göstergeleri ile
+- **🏷️ Renkli Filtre Etiketleri**: Her filtre türü için farklı renk kodlaması
+- **📊 Program Kartları Entegrasyonu**: YÖK 2024 verilerini gösteren gelişmiş program kartları
+- **⚖️ Karşılaştırma Entegrasyonu**: Arama sonuçlarından doğrudan karşılaştırmaya ekleme
+- **🔄 Yükleme Durumları**: Spinner animasyonları ve hata yönetimi
 
 ### Performans İyileştirmeleri:
 
@@ -29,6 +49,7 @@ Proje, Türkiye'deki üniversiteler, fakülteler ve programlar hakkında bilgi s
 - Cache hit oranı ile tekrarlanan isteklerde %90 hızlanma
 - Gzip ile veri transferi boyutu %70 azaldı
 - Gelişmiş Türkçe karakter desteği (toLocaleLowerCase)
+- Optimize edilmiş filtreleme algoritmaları
 
 ## Kurulum Gereksinimleri
 
@@ -100,6 +121,8 @@ npm run dev
 
 Backend API'si aşağıdaki endpoint'leri sunar:
 
+### Temel Endpoint'ler
+
 | Endpoint                       | Metot | Açıklama                                           |
 | ------------------------------ | ----- | -------------------------------------------------- |
 | `/`                            | GET   | API bilgisi ve kullanılabilir endpoint'ler         |
@@ -110,6 +133,32 @@ Backend API'si aşağıdaki endpoint'leri sunar:
 | `/api/universities/type/:type` | GET   | Üniversiteleri türe göre filtrele (Devlet/Vakıf)   |
 | `/api/search/faculty`          | GET   | Fakülteyi ada göre ara (sorgu parametresi: `name`) |
 | `/api/search/program`          | GET   | Programı ada göre ara (sorgu parametresi: `name`)  |
+| `/api/programs/score-range`    | GET   | Puan aralığına göre program arama                  |
+| `/api/statistics`              | GET   | Enhanced data istatistikleri                       |
+
+### 🆕 Gelişmiş Arama Endpoint'leri
+
+| Endpoint               | Metot | Açıklama                                                 |
+| ---------------------- | ----- | -------------------------------------------------------- |
+| `/api/search/advanced` | GET   | Çoklu kriter ile gelişmiş arama (aşağıdaki parametreler) |
+| `/api/search/filters`  | GET   | Mevcut filtre seçeneklerini getir                        |
+
+#### Gelişmiş Arama Parametreleri (`/api/search/advanced`)
+
+| Parametre           | Tür    | Açıklama                                                          | Örnek                         |
+| ------------------- | ------ | ----------------------------------------------------------------- | ----------------------------- |
+| `universityTypes`   | string | Üniversite türleri (virgülle ayrılmış)                            | `Devlet,Vakıf`                |
+| `cities`            | string | Şehirler (virgülle ayrılmış)                                      | `İstanbul,Ankara,İzmir`       |
+| `programTypes`      | string | Program türleri (virgülle ayrılmış)                               | `lisans,önlisans`             |
+| `scoreTypes`        | string | Puan türleri (virgülle ayrılmış)                                  | `SAY,EA,SÖZ`                  |
+| `facultyCategories` | string | Fakülte kategorileri (virgülle ayrılmış)                          | `engineering,medicine,social` |
+| `minScore`          | number | Minimum puan                                                      | `400`                         |
+| `maxScore`          | number | Maksimum puan                                                     | `500`                         |
+| `minQuota`          | number | Minimum kontenjan                                                 | `10`                          |
+| `maxQuota`          | number | Maksimum kontenjan                                                | `100`                         |
+| `programName`       | string | Program adı (fuzzy matching)                                      | `bilgisayar mühendisliği`     |
+| `sortBy`            | string | Sıralama kriteri (`name`, `city`, `programCount`, `facultyCount`) | `name`                        |
+| `sortOrder`         | string | Sıralama yönü (`asc`, `desc`)                                     | `asc`                         |
 
 ### API Dokümantasyonu
 
@@ -121,7 +170,9 @@ API'nin detaylı dokümantasyonuna aşağıdaki yollarla erişebilirsiniz:
 
 3. **Swagger JSON**: `backend/docs/swagger.json` dosyası, API'nin OpenAPI/Swagger formatındaki tanımını içerir. Bu dosyayı [Swagger Editor](https://editor.swagger.io/) gibi araçlarda kullanabilirsiniz.
 
-Örnek API kullanımı:
+### Örnek API Kullanımları:
+
+#### Temel Kullanım:
 
 ```javascript
 // Tüm üniversiteleri getir
@@ -135,37 +186,129 @@ fetch("http://localhost:3000/api/universities/city/istanbul")
   .then((data) => console.log(data));
 ```
 
-## Proje Yapısı
+#### 🆕 Gelişmiş Arama Örnekleri:
 
+```javascript
+// Filtre seçeneklerini getir
+fetch("http://localhost:3000/api/search/filters")
+  .then((response) => response.json())
+  .then((data) => console.log(data));
+
+// İstanbul ve Ankara'daki Devlet üniversitelerinde SAY puanı ile Mühendislik programları
+const params = new URLSearchParams({
+  cities: "İstanbul,Ankara",
+  universityTypes: "Devlet",
+  scoreTypes: "SAY",
+  facultyCategories: "engineering",
+  minScore: "400",
+  sortBy: "name",
+  sortOrder: "asc",
+});
+
+fetch(`http://localhost:3000/api/search/advanced?${params}`)
+  .then((response) => response.json())
+  .then((data) => console.log(data));
+
+// Program adına göre arama
+fetch(
+  "http://localhost:3000/api/search/advanced?programName=bilgisayar mühendisliği"
+)
+  .then((response) => response.json())
+  .then((data) => console.log(data));
+
+// Puan aralığı ve kontenjan filtreleme
+fetch(
+  "http://localhost:3000/api/search/advanced?minScore=450&maxScore=550&minQuota=20&maxQuota=100"
+)
+  .then((response) => response.json())
+  .then((data) => console.log(data));
 ```
-turkey-university-api/
-├── backend/                  # Backend API servisi
-│   ├── docs/                 # API dokümantasyonu
-│   │   ├── api-doc.md        # Markdown formatında API dokümantasyonu
-│   │   ├── swagger.json      # OpenAPI/Swagger formatında API tanımı
-│   │   ├── index.html        # Swagger UI için HTML sayfası
-│   │   └── README.md         # Dokümantasyon hakkında bilgi
-│   ├── index.ts              # Ana uygulama dosyası
-│   ├── package.json          # Bağımlılıklar ve yapılandırma
-│   └── turkey-universities.json  # Üniversite verileri
-│
-├── frontend/                 # Frontend web uygulaması
-│   ├── public/               # Statik dosyalar
-│   ├── src/                  # Kaynak kodları
-│   │   ├── components/       # React bileşenleri
-│   │   ├── pages/            # Sayfa bileşenleri
-│   │   ├── services/         # API servisleri
-│   │   ├── types/            # TypeScript tipleri
-│   │   ├── App.tsx           # Ana uygulama bileşeni
-│   │   └── main.tsx          # Giriş noktası
-│   ├── index.html            # HTML şablonu
-│   ├── package.json          # Bağımlılıklar ve yapılandırma
-│   └── vite.config.ts        # Vite yapılandırması
-│
-├── setup.js                  # Kurulum script'i
-├── start.js                  # Başlatma script'i
-└── README.md                 # Proje dokümantasyonu
+
+#### Gelişmiş Arama Yanıt Formatı:
+
+```json
+{
+  "count": 25,
+  "filters": {
+    "universityTypes": "Devlet",
+    "cities": "İstanbul,Ankara",
+    "scoreTypes": "SAY",
+    "facultyCategories": "engineering",
+    "scoreRange": { "min": "400", "max": null },
+    "quotaRange": { "min": null, "max": null },
+    "programName": null
+  },
+  "sorting": {
+    "sortBy": "name",
+    "sortOrder": "asc"
+  },
+  "results": [
+    {
+      "id": 1,
+      "name": "Boğaziçi Üniversitesi",
+      "city": "İstanbul",
+      "type": "Devlet",
+      "faculties": [
+        {
+          "id": 1,
+          "name": "Mühendislik Fakültesi",
+          "programs": [
+            {
+              "name": "Bilgisayar Mühendisliği",
+              "yokData2024": {
+                "programCode": "123456",
+                "scoreType": "SAY",
+                "programType": "lisans",
+                "quota": {
+                  "general": {
+                    "total": 50,
+                    "placed": 50,
+                    "minScore": 485.5,
+                    "maxScore": 520.3
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
 ```
+
+## 🎯 Frontend Özellikleri
+
+### Ana Sayfalar:
+
+- **Ana Sayfa**: Üniversite, fakülte ve program arama seçenekleri
+- **🆕 Gelişmiş Arama Sayfası**: Çoklu kriter filtreleme ile kapsamlı arama
+- **Üniversite Listesi**: Sayfalama ve filtreleme ile üniversite görüntüleme
+- **Üniversite Detayları**: Fakülteler, programlar ve YÖK 2024 verileri
+- **Arama Sonuçları**: Fakülte ve program arama sonuçları
+- **Karşılaştırma Sayfası**: Üniversite ve program karşılaştırması
+
+### 🆕 Gelişmiş Arama Sayfası Özellikleri:
+
+- **Katlanabilir Filtre Paneli**: Görsel durum göstergeleri ile
+- **Çoklu Filtre Türleri**:
+  - Üniversite türü (Devlet/Vakıf)
+  - Şehir seçimi (81 şehir, çoklu seçim)
+  - Program türü (Lisans/Önlisans)
+  - Puan türü (SAY, EA, SÖZ, DİL, TYT)
+  - Fakülte kategorileri (7 ana kategori)
+- **Sayısal Filtreler**: Puan ve kontenjan aralığı
+- **Akıllı Arama**: Program adı fuzzy matching
+- **Gerçek Zamanlı Sonuçlar**: Anlık filtre uygulaması
+- **Sıralama Seçenekleri**: Ad, şehir, program/fakülte sayısı
+- **Responsive Tasarım**: Mobil uyumlu arayüz
+
+### Bileşen Mimarisi:
+
+- **ProgramCard**: YÖK 2024 verilerini gösteren gelişmiş program kartları
+- **ComparisonButton**: Arama sonuçlarından doğrudan karşılaştırmaya ekleme
+- **StatisticsCard**: Enhanced data istatistikleri (quota rate kaldırıldı)
+- **Modern State Management**: TypeScript ile tip güvenli durum yönetimi
 
 ## Katkıda Bulunma
 

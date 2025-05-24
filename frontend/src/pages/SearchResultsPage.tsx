@@ -9,7 +9,10 @@ import {
   ArrowLeftIcon,
   AcademicCapIcon,
   BuildingLibraryIcon,
+  MapPinIcon,
 } from "@heroicons/react/24/outline";
+import ComparisonButton from "../components/ComparisonButton";
+import ProgramCard from "../components/ProgramCard";
 
 const SearchResultsPage = () => {
   const location = useLocation();
@@ -209,22 +212,40 @@ const SearchResultsPage = () => {
             key={result.id}
             className="bg-white rounded-lg shadow-md p-6 mb-4"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold">{result.name}</h3>
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  result.type.toLowerCase().includes("devlet")
-                    ? "bg-blue-100 text-blue-800"
-                    : "bg-purple-100 text-purple-800"
-                }`}
-              >
-                {result.type}
-              </span>
-            </div>
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold mb-2">{result.name}</h3>
+                <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                  <div className="flex items-center">
+                    <MapPinIcon className="w-4 h-4 mr-1" />
+                    <span>{result.city}</span>
+                  </div>
+                </div>
+                <span
+                  className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
+                    result.type.toLowerCase().includes("devlet")
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-purple-100 text-purple-800"
+                  }`}
+                >
+                  {result.type}
+                </span>
+              </div>
 
-            <p className="text-gray-600 mb-4">
-              <span className="font-medium">Şehir:</span> {result.city}
-            </p>
+              {/* Comparison Button */}
+              <div className="ml-4">
+                <ComparisonButton
+                  university={{
+                    ...result,
+                    website: "",
+                    address: "",
+                    logo: "",
+                  }}
+                  size="md"
+                  showText={true}
+                />
+              </div>
+            </div>
 
             <div className="border-t border-gray-200 pt-4">
               <h4 className="font-medium mb-2">Eşleşen Fakülteler</h4>
@@ -288,38 +309,58 @@ const SearchResultsPage = () => {
             key={result.id}
             className="bg-white rounded-lg shadow-md p-6 mb-4"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold">{result.name}</h3>
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  result.type.toLowerCase().includes("devlet")
-                    ? "bg-blue-100 text-blue-800"
-                    : "bg-purple-100 text-purple-800"
-                }`}
-              >
-                {result.type}
-              </span>
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold mb-2">{result.name}</h3>
+                <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                  <div className="flex items-center">
+                    <MapPinIcon className="w-4 h-4 mr-1" />
+                    <span>{result.city}</span>
+                  </div>
+                </div>
+                <span
+                  className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${
+                    result.type.toLowerCase().includes("devlet")
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-purple-100 text-purple-800"
+                  }`}
+                >
+                  {result.type}
+                </span>
+              </div>
+
+              {/* Comparison Button */}
+              <div className="ml-4">
+                <ComparisonButton
+                  university={{
+                    ...result,
+                    website: "",
+                    address: "",
+                    logo: "",
+                  }}
+                  size="md"
+                  showText={true}
+                />
+              </div>
             </div>
 
-            <p className="text-gray-600 mb-4">
-              <span className="font-medium">Şehir:</span> {result.city}
-            </p>
-
             <div className="border-t border-gray-200 pt-4">
-              <h4 className="font-medium mb-2">Eşleşen Programlar</h4>
+              <h4 className="font-medium mb-3">Eşleşen Programlar</h4>
               {result.faculties.map((faculty) => (
-                <div key={faculty.id} className="mb-4">
-                  <div className="flex items-center mb-2">
+                <div key={faculty.id} className="mb-6">
+                  <div className="flex items-center mb-3">
                     <BuildingLibraryIcon className="w-5 h-5 text-blue-600 mr-2" />
                     <span className="font-medium">{faculty.name}</span>
                   </div>
-                  <ul className="space-y-1 pl-7">
+                  <div className="space-y-3 pl-7">
                     {faculty.programs.map((program, index) => (
-                      <li key={index} className="text-gray-700">
-                        • {program.name}
-                      </li>
+                      <ProgramCard
+                        key={index}
+                        program={program}
+                        showEnhancedData={true}
+                      />
                     ))}
-                  </ul>
+                  </div>
                 </div>
               ))}
             </div>

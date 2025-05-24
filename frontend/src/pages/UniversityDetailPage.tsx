@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { getUniversityById } from "../services/api";
 import { University } from "../types";
 import FacultyList from "../components/FacultyList";
+import FavoriteButton from "../components/FavoriteButton";
+import ComparisonButton from "../components/ComparisonButton";
 import {
   ArrowLeftIcon,
   GlobeAltIcon,
@@ -90,7 +92,7 @@ const UniversityDetailPage = () => {
               </div>
             )}
 
-            <div>
+            <div className="flex-1">
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 text-center md:text-left">
                 {university.name}
               </h1>
@@ -122,6 +124,22 @@ const UniversityDetailPage = () => {
                   </a>
                 )}
               </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 mt-4 md:mt-0 md:ml-6">
+              <FavoriteButton
+                university={university}
+                size="lg"
+                showText={true}
+                className="bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              />
+              <ComparisonButton
+                university={university}
+                size="lg"
+                showText={true}
+                className="bg-white border border-gray-300 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              />
             </div>
           </div>
 
