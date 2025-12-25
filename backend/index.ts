@@ -353,8 +353,10 @@ app.get("/health", (_req, res) => {
 // Ana sayfa
 app.get("/", (_req, res) => {
   res.json({
-    message: "Türkiye Üniversiteleri API - Enhanced Version",
-    version: "2.0.0",
+    message: "Türkiye Üniversiteleri API - 2025 Güncel Veri Seti",
+    version: "3.0.0",
+    lastUpdated: "2025-12-25",
+    datasource: "YÖK Atlas 2025 Yerleştirme Sonuçları",
     endpoints: {
       "/health": "Sistem durumu kontrolü",
       "/api/universities": "Tüm üniversiteleri listeler (enhanced data ile)",
