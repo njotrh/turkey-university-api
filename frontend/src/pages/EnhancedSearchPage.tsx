@@ -450,7 +450,7 @@ const EnhancedSearchPage = () => {
                   <option value="city">Şehir</option>
                   <option value="programCount">Program Sayısı</option>
                   <option value="facultyCount">Fakülte Sayısı</option>
-                  <option value="score">Puan (YÖK 2024)</option>
+                  <option value="score">Puan (YÖK 2025)</option>
                 </select>
                 <select
                   value={filters.sortOrder || "asc"}

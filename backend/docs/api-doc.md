@@ -30,7 +30,7 @@ Türkiye Üniversiteleri API, Türkiye'deki üniversiteler hakkında kapsamlı b
 
 - ✅ Üniversiteleri listeleyebilir ve filtreleyebilirsiniz
 - 🔍 Gelişmiş arama ve filtreleme yapabilirsiniz
-- 📊 YÖK 2024 verilerine erişebilirsiniz
+- 📊 YÖK 2025 verilerine erişebilirsiniz
 - ⚖️ Üniversite ve program karşılaştırması yapabilirsiniz
 
 ## ✨ Yeni Özellikler (v2.0.0)
@@ -38,7 +38,7 @@ Türkiye Üniversiteleri API, Türkiye'deki üniversiteler hakkında kapsamlı b
 ### 🔍 Kapsamlı Gelişmiş Arama Sistemi
 
 - **🎯 Çoklu Kriter Filtreleme**: Üniversite türü, şehir, program türü, puan türü ve fakülte kategorilerine göre filtreleme
-- **📊 YÖK 2024 Veri Entegrasyonu**: Güncel YÖK verilerine dayalı puan aralıkları ve kontenjan bilgileri
+- **📊 YÖK 2025 Veri Entegrasyonu**: Güncel YÖK verilerine dayalı puan aralıkları ve kontenjan bilgileri
 - **🔢 Sayısal Filtreler**: Puan aralığı (min/max) ve kontenjan aralığı (min/max) filtreleme
 - **📝 Akıllı Metin Arama**: Program adlarında fuzzy matching ile gelişmiş arama
 - **🏷️ Fakülte Kategorileri**: Mühendislik, Tıp, Sosyal Bilimler, Fen Bilimleri, Eğitim, Hukuk, İşletme kategorileri
@@ -85,7 +85,7 @@ Sistem durumunu ve performans metriklerini döndürür.
     ```json
     {
       "status": "healthy",
-      "timestamp": "2024-01-15T10:30:00.000Z",
+      "timestamp": "2025-01-15T10:30:00.000Z",
       "uptime": 3600.5,
       "cache": {
         "size": 25
@@ -541,7 +541,7 @@ Gelişmiş arama için mevcut filtre seçeneklerini döndürür.
               "programs": [
                 {
                   "name": "Bilgisayar Mühendisliği",
-                  "yokData2024": {
+                  "yokData2025": {
                     "programCode": "123456",
                     "scoreType": "SAY",
                     "programType": "lisans",
@@ -629,10 +629,10 @@ interface FilterOptions {
 }
 ```
 
-#### YÖK 2024 Enhanced Data
+#### YÖK 2025 Enhanced Data
 
 ```typescript
-interface YokData2024 {
+interface YokData2025 {
   programCode: string;
   scoreType: string;
   programType: string;
@@ -699,7 +699,7 @@ API, standart HTTP durum kodlarını kullanır:
 {
   "error": "Hata mesajı",
   "code": "ERROR_CODE",
-  "timestamp": "2024-01-15T10:30:00.000Z",
+  "timestamp": "2025-01-15T10:30:00.000Z",
   "path": "/api/universities/999"
 }
 ```
@@ -774,8 +774,8 @@ async function comprehensiveSearch() {
       console.log(`  📚 ${faculty.name}`);
 
       faculty.programs.forEach((program) => {
-        if (program.yokData2024) {
-          const quota = program.yokData2024.quota.general;
+        if (program.yokData2025) {
+          const quota = program.yokData2025.quota.general;
           console.log(`    🎓 ${program.name}`);
           console.log(`       📊 Puan: ${quota.minScore}-${quota.maxScore}`);
           console.log(`       👥 Kontenjan: ${quota.total}`);

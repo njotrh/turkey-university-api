@@ -6,7 +6,7 @@
 
 > **Türkiye Üniversiteleri API'sinin kapsamlı dokümantasyon merkezi**
 
-Bu klasör, Türkiye Üniversiteleri API'sinin tüm dokümantasyonunu içerir. API, YÖK 2024 verilerini entegre eden gelişmiş arama sistemi ile güncellenmiştir.
+Bu klasör, Türkiye Üniversiteleri API'sinin tüm dokümantasyonunu içerir. API, YÖK 2025 verilerini entegre eden gelişmiş arama sistemi ile güncellenmiştir.
 
 ## 📋 İçindekiler
 
@@ -46,7 +46,7 @@ curl "http://localhost:3000/api/search/advanced?cities=İstanbul&universityTypes
 ### 🔍 Gelişmiş Arama Sistemi
 
 - **🎯 Çoklu Kriter Filtreleme**: Üniversite türü, şehir, program türü, puan türü ve fakülte kategorilerine göre filtreleme
-- **📊 YÖK 2024 Veri Entegrasyonu**: Güncel puan aralıkları ve kontenjan bilgileri
+- **📊 YÖK 2025 Veri Entegrasyonu**: Güncel puan aralıkları ve kontenjan bilgileri
 - **🔢 Sayısal Filtreler**: Puan aralığı (min/max) ve kontenjan aralığı (min/max) filtreleme
 - **📝 Akıllı Metin Arama**: Program adlarında fuzzy matching ile gelişmiş arama
 - **🏷️ Fakülte Kategorileri**: 7 ana fakülte kategorisi ile gelişmiş filtreleme

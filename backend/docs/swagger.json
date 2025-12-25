@@ -2,7 +2,7 @@
   "openapi": "3.0.0",
   "info": {
     "title": "Türkiye Üniversiteleri API",
-    "description": "Türkiye'deki üniversiteler hakkında fakülteleri ve programları da dahil olmak üzere kapsamlı bilgi sağlayan RESTful API servisi. v2.0.0 ile YÖK 2024 veri entegrasyonu ve gelişmiş çoklu kriter arama sistemi eklendi.",
+    "description": "Türkiye'deki üniversiteler hakkında fakülteleri ve programları da dahil olmak üzere kapsamlı bilgi sağlayan RESTful API servisi. v2.0.0 ile YÖK 2025 veri entegrasyonu ve gelişmiş çoklu kriter arama sistemi eklendi.",
     "version": "2.0.0",
     "contact": {
       "name": "API Desteği"
@@ -29,7 +29,7 @@
     },
     {
       "name": "Gelişmiş Arama",
-      "description": "YÖK 2024 verili çoklu kriter arama sistemi"
+      "description": "YÖK 2025 verili çoklu kriter arama sistemi"
     },
     {
       "name": "İstatistikler",
@@ -127,7 +127,7 @@
                     "timestamp": {
                       "type": "string",
                       "format": "date-time",
-                      "example": "2024-01-15T10:30:00.000Z"
+                      "example": "2025-01-15T10:30:00.000Z"
                     },
                     "uptime": {
                       "type": "number",
@@ -524,7 +524,7 @@
     "/api/statistics": {
       "get": {
         "summary": "Enhanced Data İstatistikleri",
-        "description": "YÖK 2024 enhanced data istatistiklerini döndürür",
+        "description": "YÖK 2025 enhanced data istatistiklerini döndürür",
         "tags": ["İstatistikler"],
         "responses": {
           "200": {
@@ -712,12 +712,12 @@
             "type": "string",
             "example": "Bilgisayar Mühendisliği"
           },
-          "yokData2024": {
-            "$ref": "#/components/schemas/YokData2024"
+          "yokData2025": {
+            "$ref": "#/components/schemas/YokData2025"
           }
         }
       },
-      "YokData2024": {
+      "YokData2025": {
         "type": "object",
         "properties": {
           "programCode": {

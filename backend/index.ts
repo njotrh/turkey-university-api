@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 import { createHash } from "crypto";
 
-// Enhanced data types for YÖK 2024 data
+// Enhanced data types for YÖK 2025 data
 interface QuotaDetails {
   total: number | null;
   placed: number | null;
@@ -13,7 +13,7 @@ interface QuotaDetails {
   maxScore: number | null;
 }
 
-interface YokData2024 {
+interface YokData2025 {
   programCode: string;
   scoreType: string;
   programType: string;
@@ -29,7 +29,7 @@ interface YokData2024 {
 // Enhanced Program interface with optional YÖK data for backward compatibility
 interface Program {
   name: string;
-  yokData2024?: YokData2024;
+  yokData2025?: YokData2025;
 }
 
 interface Faculty {
@@ -374,7 +374,7 @@ app.get("/", (_req, res) => {
       "/api/statistics": "Enhanced data istatistikleri",
     },
     features: [
-      "Enhanced YÖK 2024 data",
+      "Enhanced YÖK 2025 data",
       "Score range filtering",
       "Quota type filtering",
       "Statistical analysis",
@@ -624,9 +624,9 @@ app.get(
         const matchingFaculties = uni.faculties
           .map((faculty) => {
             const matchingPrograms = faculty.programs.filter((program) => {
-              if (!program.yokData2024) return false;
+              if (!program.yokData2025) return false;
 
-              const data = program.yokData2024;
+              const data = program.yokData2025;
               if (scoreType && data.scoreType !== scoreType) return false;
 
               const generalQuota = data.quota.general;
@@ -727,7 +727,7 @@ app.get("/api/search/advanced", cacheMiddleware(5 * 60 * 1000), (req, res) => {
               return false;
             }
 
-            if (!program.yokData2024) return true; // Include programs without enhanced data
+            if (!program.yokData2025) return true; // Include programs without enhanced data
 
             // Program type filter
             if (programTypes) {
@@ -735,7 +735,7 @@ app.get("/api/search/advanced", cacheMiddleware(5 * 60 * 1000), (req, res) => {
                 .split(",")
                 .map((t) => t.trim().toLowerCase());
               if (
-                !types.includes(program.yokData2024.programType.toLowerCase())
+                !types.includes(program.yokData2025.programType.toLowerCase())
               ) {
                 return false;
               }
@@ -747,7 +747,7 @@ app.get("/api/search/advanced", cacheMiddleware(5 * 60 * 1000), (req, res) => {
                 .split(",")
                 .map((t) => t.trim().toUpperCase());
               if (
-                !types.includes(program.yokData2024.scoreType.toUpperCase())
+                !types.includes(program.yokData2025.scoreType.toUpperCase())
               ) {
                 return false;
               }
@@ -755,7 +755,7 @@ app.get("/api/search/advanced", cacheMiddleware(5 * 60 * 1000), (req, res) => {
 
             // Score range filter
             if (minScore || maxScore) {
-              const generalQuota = program.yokData2024.quota.general;
+              const generalQuota = program.yokData2025.quota.general;
               if (
                 generalQuota.minScore !== null &&
                 generalQuota.maxScore !== null
@@ -782,7 +782,7 @@ app.get("/api/search/advanced", cacheMiddleware(5 * 60 * 1000), (req, res) => {
 
             // Quota range filter
             if (minQuota || maxQuota) {
-              const totalQuota = program.yokData2024.quota.general.total;
+              const totalQuota = program.yokData2025.quota.general.total;
               if (totalQuota !== null) {
                 if (minQuota && totalQuota < parseInt(minQuota as string))
                   return false;
@@ -901,10 +901,10 @@ app.get("/api/search/advanced", cacheMiddleware(5 * 60 * 1000), (req, res) => {
           a.faculties.forEach((faculty) => {
             faculty.programs.forEach((program) => {
               if (
-                program.yokData2024?.quota?.general?.minScore !== null &&
-                program.yokData2024?.quota?.general?.minScore !== undefined
+                program.yokData2025?.quota?.general?.minScore !== null &&
+                program.yokData2025?.quota?.general?.minScore !== undefined
               ) {
-                aScores.push(program.yokData2024.quota.general.minScore);
+                aScores.push(program.yokData2025.quota.general.minScore);
               }
             });
           });
@@ -912,10 +912,10 @@ app.get("/api/search/advanced", cacheMiddleware(5 * 60 * 1000), (req, res) => {
           b.faculties.forEach((faculty) => {
             faculty.programs.forEach((program) => {
               if (
-                program.yokData2024?.quota?.general?.minScore !== null &&
-                program.yokData2024?.quota?.general?.minScore !== undefined
+                program.yokData2025?.quota?.general?.minScore !== null &&
+                program.yokData2025?.quota?.general?.minScore !== undefined
               ) {
-                bScores.push(program.yokData2024.quota.general.minScore);
+                bScores.push(program.yokData2025.quota.general.minScore);
               }
             });
           });
@@ -980,9 +980,9 @@ app.get("/api/search/filters", cacheMiddleware(10 * 60 * 1000), (_req, res) => {
       facultyNames.add(faculty.name);
 
       faculty.programs.forEach((program) => {
-        if (program.yokData2024) {
-          scoreTypes.add(program.yokData2024.scoreType);
-          programTypes.add(program.yokData2024.programType);
+        if (program.yokData2025) {
+          scoreTypes.add(program.yokData2025.scoreType);
+          programTypes.add(program.yokData2025.programType);
         }
       });
     });
@@ -1054,16 +1054,16 @@ app.get("/api/statistics", cacheMiddleware(10 * 60 * 1000), (_req, res) => {
       faculty.programs.forEach((program) => {
         totalPrograms++;
 
-        if (program.yokData2024) {
+        if (program.yokData2025) {
           programsWithData++;
-          scoreTypes.add(program.yokData2024.scoreType);
-          programTypes.add(program.yokData2024.programType);
+          scoreTypes.add(program.yokData2025.scoreType);
+          programTypes.add(program.yokData2025.programType);
 
-          if (program.yokData2024.quota.general.total) {
-            totalQuota += program.yokData2024.quota.general.total;
+          if (program.yokData2025.quota.general.total) {
+            totalQuota += program.yokData2025.quota.general.total;
           }
-          if (program.yokData2024.quota.general.placed) {
-            totalPlaced += program.yokData2024.quota.general.placed;
+          if (program.yokData2025.quota.general.placed) {
+            totalPlaced += program.yokData2025.quota.general.placed;
           }
         }
       });

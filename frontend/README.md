@@ -62,7 +62,7 @@ Uygulama **[http://localhost:5173](http://localhost:5173)** adresinde çalışac
 - **🏫 Üniversite Keşfi**: 205 üniversite arasında arama ve filtreleme
 - **🔍 Gelişmiş Arama**: Çoklu kriter ile kapsamlı filtreleme sistemi
 - **⚖️ Karşılaştırma**: Üniversite ve program karşılaştırması
-- **📊 YÖK 2024 Verileri**: Güncel puan aralıkları ve kontenjan bilgileri
+- **📊 YÖK 2025 Verileri**: Güncel puan aralıkları ve kontenjan bilgileri
 - **📱 Responsive Tasarım**: Mobil, tablet ve masaüstü uyumlu
 - **⚡ Hızlı Performans**: Optimized loading ve caching
 
@@ -71,7 +71,7 @@ Uygulama **[http://localhost:5173](http://localhost:5173)** adresinde çalışac
 - **🔍 Gelişmiş Arama Sayfası**: Çoklu kriter filtreleme sistemi
 - **🎛️ Etkileşimli Filtre Paneli**: Katlanabilir, görsel durum göstergeleri
 - **🏷️ Renkli Filtre Etiketleri**: Her filtre türü için farklı renk kodlaması
-- **📊 Program Kartları**: YÖK 2024 verilerini gösteren gelişmiş kartlar
+- **📊 Program Kartları**: YÖK 2025 verilerini gösteren gelişmiş kartlar
 - **⚖️ Karşılaştırma Entegrasyonu**: Arama sonuçlarından doğrudan ekleme
 - **🔄 Yükleme Durumları**: Spinner animasyonları ve hata yönetimi
 
@@ -141,7 +141,7 @@ Uygulama **[http://localhost:5173](http://localhost:5173)** adresinde çalışac
 - **📱 Katlanabilir Filtre Paneli**: Mobil uyumlu, görsel durum göstergeleri
 - **🎨 Renkli Filtre Etiketleri**: Her filtre türü için farklı renk kodlaması
 - **🔄 Gerçek Zamanlı Sonuçlar**: Anlık filtre uygulaması
-- **📊 Sıralama Seçenekleri**: Ad, şehir, program/fakülte sayısı, puan (YÖK 2024)
+- **📊 Sıralama Seçenekleri**: Ad, şehir, program/fakülte sayısı, puan (YÖK 2025)
 - **📱 Responsive Tasarım**: Mobil ve masaüstü optimizasyonu
 
 ## 🎨 Bileşen Mimarisi

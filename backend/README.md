@@ -7,7 +7,7 @@
 
 > **Türkiye'deki üniversiteler hakkında kapsamlı bilgi sağlayan yüksek performanslı RESTful API servisi**
 
-Bu backend servisi, Türkiye'deki üniversiteler, fakülteler ve programlar hakkında detaylı bilgi sunar. YÖK 2024 verilerini entegre eden gelişmiş arama sistemi, in-memory caching ve rate limiting ile optimize edilmiştir.
+Bu backend servisi, Türkiye'deki üniversiteler, fakülteler ve programlar hakkında detaylı bilgi sunar. YÖK 2025 verilerini entegre eden gelişmiş arama sistemi, in-memory caching ve rate limiting ile optimize edilmiştir.
 
 ## 📋 İçindekiler
 
@@ -44,7 +44,7 @@ node index.ts
 ### 🆕 Yeni Özellikler (v2.0.0)
 
 - **🔍 Gelişmiş Çoklu Kriter Arama**: Üniversite türü, şehir, program türü, puan türü ve fakülte kategorilerine göre filtreleme
-- **📊 YÖK 2024 Veri Entegrasyonu**: Güncel puan aralıkları ve kontenjan bilgileri
+- **📊 YÖK 2025 Veri Entegrasyonu**: Güncel puan aralıkları ve kontenjan bilgileri
 - **🎯 Akıllı Filtreleme**: Sayısal aralık filtreleri ve fuzzy text matching
 - **🏷️ Fakülte Kategorileri**: 7 ana fakülte kategorisi ile gelişmiş filtreleme
 - **⚡ Performans İyileştirmeleri**: In-memory caching, rate limiting, gzip compression
@@ -157,7 +157,7 @@ curl "http://localhost:3000/api/search/advanced?cities=İstanbul&universityTypes
 
 ## 🏗️ Veri Yapısı
 
-API, veri kaynağı olarak `turkey-universities-enhanced.json` dosyasını kullanır ve YÖK 2024 enhanced data ile zenginleştirilmiştir.
+API, veri kaynağı olarak `turkey-universities-enhanced.json` dosyasını kullanır ve YÖK 2025 enhanced data ile zenginleştirilmiştir.
 
 ### 📊 Temel Veri Yapıları
 
@@ -181,14 +181,14 @@ interface Faculty {
 
 interface Program {
   name: string;
-  yokData2024?: YokData2024; // 🆕 Enhanced data
+  yokData2025?: YokData2025; // 🆕 Enhanced data
 }
 ```
 
-### 🆕 YÖK 2024 Enhanced Data
+### 🆕 YÖK 2025 Enhanced Data
 
 ```typescript
-interface YokData2024 {
+interface YokData2025 {
   programCode: string;
   scoreType: string;
   programType: string;

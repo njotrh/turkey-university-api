@@ -119,12 +119,12 @@ export const useExport = () => {
           name: faculty.name,
           programs: faculty.programs.map((program) => ({
             name: program.name,
-            programCode: program.yokData2024?.programCode,
-            programType: program.yokData2024?.programType,
-            scoreType: program.yokData2024?.scoreType,
-            minScore: program.yokData2024?.quota?.general?.minScore,
-            maxScore: program.yokData2024?.quota?.general?.maxScore,
-            quota: program.yokData2024?.quota,
+            programCode: program.yokData2025?.programCode,
+            programType: program.yokData2025?.programType,
+            scoreType: program.yokData2025?.scoreType,
+            minScore: program.yokData2025?.quota?.general?.minScore,
+            maxScore: program.yokData2025?.quota?.general?.maxScore,
+            quota: program.yokData2025?.quota,
           })),
         })),
       })),
@@ -188,7 +188,7 @@ export const useExport = () => {
           }
 
           faculty.programs.forEach((program) => {
-            const quota = program.yokData2024?.quota?.general;
+            const quota = program.yokData2025?.quota?.general;
             const row = [
               result.id?.toString() || "",
               `"${result.name || ""}"`,
@@ -196,9 +196,9 @@ export const useExport = () => {
               `"${result.city || ""}"`,
               `"${faculty.name || ""}"`,
               `"${program.name || ""}"`,
-              `"${program.yokData2024?.programCode || ""}"`,
-              `"${program.yokData2024?.programType || ""}"`,
-              `"${program.yokData2024?.scoreType || ""}"`,
+              `"${program.yokData2025?.programCode || ""}"`,
+              `"${program.yokData2025?.programType || ""}"`,
+              `"${program.yokData2025?.scoreType || ""}"`,
               quota?.minScore?.toString() || "",
               quota?.maxScore?.toString() || "",
               quota?.total?.toString() || "",
@@ -369,12 +369,12 @@ export const useExport = () => {
             selectedProgram: {
               name: targetProgram?.name || selectedProgram,
               faculty: targetFaculty?.name || "Bilinmiyor",
-              programCode: targetProgram?.yokData2024?.programCode,
-              programType: targetProgram?.yokData2024?.programType,
-              scoreType: targetProgram?.yokData2024?.scoreType,
-              minScore: targetProgram?.yokData2024?.quota?.general?.minScore,
-              maxScore: targetProgram?.yokData2024?.quota?.general?.maxScore,
-              quota: targetProgram?.yokData2024?.quota,
+              programCode: targetProgram?.yokData2025?.programCode,
+              programType: targetProgram?.yokData2025?.programType,
+              scoreType: targetProgram?.yokData2025?.scoreType,
+              minScore: targetProgram?.yokData2025?.quota?.general?.minScore,
+              maxScore: targetProgram?.yokData2025?.quota?.general?.maxScore,
+              quota: targetProgram?.yokData2025?.quota,
             },
           };
         } else {
@@ -397,12 +397,12 @@ export const useExport = () => {
               programCount: faculty.programs.length,
               programs: faculty.programs.map((program) => ({
                 name: program.name,
-                programCode: program.yokData2024?.programCode,
-                programType: program.yokData2024?.programType,
-                scoreType: program.yokData2024?.scoreType,
-                minScore: program.yokData2024?.quota?.general?.minScore,
-                maxScore: program.yokData2024?.quota?.general?.maxScore,
-                quota: program.yokData2024?.quota,
+                programCode: program.yokData2025?.programCode,
+                programType: program.yokData2025?.programType,
+                scoreType: program.yokData2025?.scoreType,
+                minScore: program.yokData2025?.quota?.general?.minScore,
+                maxScore: program.yokData2025?.quota?.general?.maxScore,
+                quota: program.yokData2025?.quota,
               })),
             })),
           };
@@ -480,7 +480,7 @@ export const useExport = () => {
             )
           )?.name || "Bilinmiyor";
 
-        const quota = programData?.yokData2024?.quota?.general;
+        const quota = programData?.yokData2025?.quota?.general;
         const placementRate =
           quota?.total && quota?.placed
             ? ((quota.placed / quota.total) * 100).toFixed(1)
@@ -491,9 +491,9 @@ export const useExport = () => {
           `"${university.type}"`,
           `"${university.city}"`,
           `"${facultyName}"`,
-          `"${programData?.yokData2024?.programCode || ""}"`,
-          `"${programData?.yokData2024?.programType || ""}"`,
-          `"${programData?.yokData2024?.scoreType || ""}"`,
+          `"${programData?.yokData2025?.programCode || ""}"`,
+          `"${programData?.yokData2025?.programType || ""}"`,
+          `"${programData?.yokData2025?.scoreType || ""}"`,
           quota?.minScore?.toString() || "",
           quota?.maxScore?.toString() || "",
           quota?.total?.toString() || "",

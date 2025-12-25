@@ -10,7 +10,7 @@ const ProgramCard = ({
   program,
   showEnhancedData = true,
 }: ProgramCardProps) => {
-  const { yokData2024 } = program;
+  const { yokData2025 } = program;
 
   const getScoreTypeColor = (scoreType: string) => {
     switch (scoreType) {
@@ -38,39 +38,39 @@ const ProgramCard = ({
           {program.name}
         </h4>
         <div className="flex gap-2">
-          {yokData2024 && (
+          {yokData2025 && (
             <>
               <span
                 className={`px-2 py-1 rounded-full text-xs font-medium ${
-                  yokData2024.programType === "lisans"
+                  yokData2025.programType === "lisans"
                     ? "bg-blue-100 text-blue-800"
                     : "bg-green-100 text-green-800"
                 }`}
               >
-                {yokData2024.programType === "lisans" ? "Lisans" : "Önlisans"}
+                {yokData2025.programType === "lisans" ? "Lisans" : "Önlisans"}
               </span>
               <span
                 className={`px-2 py-1 rounded-full text-xs font-medium ${getScoreTypeColor(
-                  yokData2024.scoreType
+                  yokData2025.scoreType
                 )}`}
               >
-                {yokData2024.scoreType}
+                {yokData2025.scoreType}
               </span>
             </>
           )}
         </div>
       </div>
 
-      {showEnhancedData && yokData2024 && (
+      {showEnhancedData && yokData2025 && (
         <div className="space-y-3">
           {/* Program Code */}
           <div className="flex items-center text-sm text-gray-600">
             <AcademicCapIcon className="w-4 h-4 mr-2" />
-            <span>Kod: {yokData2024.programCode}</span>
+            <span>Kod: {yokData2025.programCode}</span>
           </div>
 
           {/* General Quota Information */}
-          {yokData2024.quota.general.total && (
+          {yokData2025.quota.general.total && (
             <div className="bg-gray-50 rounded-lg p-3">
               <div className="flex items-center mb-2">
                 <UserGroupIcon className="w-4 h-4 mr-2 text-blue-600" />
@@ -81,25 +81,25 @@ const ProgramCard = ({
                 <div>
                   <span className="text-gray-600">Kontenjan:</span>
                   <span className="ml-1 font-medium">
-                    {yokData2024.quota.general.total}
+                    {yokData2025.quota.general.total}
                   </span>
                 </div>
                 <div>
                   <span className="text-gray-600">Yerleşen:</span>
                   <span className="ml-1 font-medium">
-                    {yokData2024.quota.general.placed || 0}
+                    {yokData2025.quota.general.placed || 0}
                   </span>
                 </div>
                 <div>
                   <span className="text-gray-600">Min Puan:</span>
                   <span className="ml-1 font-medium">
-                    {formatScore(yokData2024.quota.general.minScore)}
+                    {formatScore(yokData2025.quota.general.minScore)}
                   </span>
                 </div>
                 <div>
                   <span className="text-gray-600">Max Puan:</span>
                   <span className="ml-1 font-medium">
-                    {formatScore(yokData2024.quota.general.maxScore)}
+                    {formatScore(yokData2025.quota.general.maxScore)}
                   </span>
                 </div>
               </div>
@@ -108,42 +108,42 @@ const ProgramCard = ({
 
           {/* Special Quotas */}
           <div className="space-y-2">
-            {yokData2024.quota.schoolFirst.total &&
-              yokData2024.quota.schoolFirst.total > 0 && (
+            {yokData2025.quota.schoolFirst.total &&
+              yokData2025.quota.schoolFirst.total > 0 && (
                 <div className="flex items-center justify-between text-xs bg-blue-50 px-2 py-1 rounded">
                   <span className="text-blue-700">Okul Birincisi</span>
                   <span className="font-medium">
-                    {yokData2024.quota.schoolFirst.total} kontenjan
+                    {yokData2025.quota.schoolFirst.total} kontenjan
                   </span>
                 </div>
               )}
 
-            {yokData2024.quota.womenOver34.total &&
-              yokData2024.quota.womenOver34.total > 0 && (
+            {yokData2025.quota.womenOver34.total &&
+              yokData2025.quota.womenOver34.total > 0 && (
                 <div className="flex items-center justify-between text-xs bg-pink-50 px-2 py-1 rounded">
                   <span className="text-pink-700">34+ Yaş Kadın</span>
                   <span className="font-medium">
-                    {yokData2024.quota.womenOver34.total} kontenjan
+                    {yokData2025.quota.womenOver34.total} kontenjan
                   </span>
                 </div>
               )}
 
-            {yokData2024.quota.earthquake.total &&
-              yokData2024.quota.earthquake.total > 0 && (
+            {yokData2025.quota.earthquake.total &&
+              yokData2025.quota.earthquake.total > 0 && (
                 <div className="flex items-center justify-between text-xs bg-red-50 px-2 py-1 rounded">
                   <span className="text-red-700">Deprem</span>
                   <span className="font-medium">
-                    {yokData2024.quota.earthquake.total} kontenjan
+                    {yokData2025.quota.earthquake.total} kontenjan
                   </span>
                 </div>
               )}
 
-            {yokData2024.quota.veteran.total &&
-              yokData2024.quota.veteran.total > 0 && (
+            {yokData2025.quota.veteran.total &&
+              yokData2025.quota.veteran.total > 0 && (
                 <div className="flex items-center justify-between text-xs bg-green-50 px-2 py-1 rounded">
                   <span className="text-green-700">Gazi/Şehit</span>
                   <span className="font-medium">
-                    {yokData2024.quota.veteran.total} kontenjan
+                    {yokData2025.quota.veteran.total} kontenjan
                   </span>
                 </div>
               )}
@@ -151,9 +151,9 @@ const ProgramCard = ({
         </div>
       )}
 
-      {!yokData2024 && showEnhancedData && (
+      {!yokData2025 && showEnhancedData && (
         <div className="text-xs text-gray-500 italic">
-          Bu program için 2024 YÖK verisi bulunmamaktadır.
+          Bu program için 2025 YÖK verisi bulunmamaktadır.
         </div>
       )}
     </div>

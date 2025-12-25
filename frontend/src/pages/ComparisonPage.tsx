@@ -646,7 +646,7 @@ const ComparisonPage = () => {
               Program Karşılaştırması
             </h2>
             <p className="text-sm text-gray-600 mt-1">
-              Ortak programları karşılaştırarak YÖK 2024 verilerini inceleyin
+              Ortak programları karşılaştırarak YÖK 2025 verilerini inceleyin
             </p>
           </div>
 
@@ -681,7 +681,7 @@ const ComparisonPage = () => {
                     - Program Karşılaştırması
                   </h3>
                   <p className="text-sm text-blue-700">
-                    Seçilen program için üniversiteler arası YÖK 2024
+                    Seçilen program için üniversiteler arası YÖK 2025
                     verilerinin karşılaştırması
                   </p>
                 </div>
@@ -727,25 +727,25 @@ const ComparisonPage = () => {
                         </div>
 
                         {/* Program Data */}
-                        {programData?.yokData2024 ? (
+                        {programData?.yokData2025 ? (
                           <div className="space-y-3">
                             {/* Program Type and Score Type */}
                             <div className="flex gap-2">
                               <span
                                 className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                  programData.yokData2024.programType ===
+                                  programData.yokData2025.programType ===
                                   "lisans"
                                     ? "bg-blue-100 text-blue-800"
                                     : "bg-green-100 text-green-800"
                                 }`}
                               >
-                                {programData.yokData2024.programType ===
+                                {programData.yokData2025.programType ===
                                 "lisans"
                                   ? "Lisans"
                                   : "Önlisans"}
                               </span>
                               <span className="px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                                {programData.yokData2024.scoreType}
+                                {programData.yokData2025.scoreType}
                               </span>
                             </div>
 
@@ -755,12 +755,12 @@ const ComparisonPage = () => {
                                 Program Kodu:
                               </span>
                               <span className="ml-2 font-medium">
-                                {programData.yokData2024.programCode}
+                                {programData.yokData2025.programCode}
                               </span>
                             </div>
 
                             {/* General Quota Info */}
-                            {programData.yokData2024.quota.general.total && (
+                            {programData.yokData2025.quota.general.total && (
                               <div className="bg-gray-50 rounded-lg p-3">
                                 <h5 className="font-medium text-sm mb-2">
                                   Genel Kontenjan
@@ -772,7 +772,7 @@ const ComparisonPage = () => {
                                     </span>
                                     <span className="ml-1 font-medium">
                                       {
-                                        programData.yokData2024.quota.general
+                                        programData.yokData2025.quota.general
                                           .total
                                       }
                                     </span>
@@ -782,7 +782,7 @@ const ComparisonPage = () => {
                                       Yerleşen:
                                     </span>
                                     <span className="ml-1 font-medium">
-                                      {programData.yokData2024.quota.general
+                                      {programData.yokData2025.quota.general
                                         .placed || 0}
                                     </span>
                                   </div>
@@ -791,7 +791,7 @@ const ComparisonPage = () => {
                                       Min Puan:
                                     </span>
                                     <span className="ml-1 font-medium">
-                                      {programData.yokData2024.quota.general.minScore?.toFixed(
+                                      {programData.yokData2025.quota.general.minScore?.toFixed(
                                         2
                                       ) || "N/A"}
                                     </span>
@@ -801,7 +801,7 @@ const ComparisonPage = () => {
                                       Max Puan:
                                     </span>
                                     <span className="ml-1 font-medium">
-                                      {programData.yokData2024.quota.general.maxScore?.toFixed(
+                                      {programData.yokData2025.quota.general.maxScore?.toFixed(
                                         2
                                       ) || "N/A"}
                                     </span>
@@ -812,9 +812,9 @@ const ComparisonPage = () => {
 
                             {/* Special Quotas */}
                             <div className="space-y-1">
-                              {programData.yokData2024.quota.schoolFirst
+                              {programData.yokData2025.quota.schoolFirst
                                 .total &&
-                                programData.yokData2024.quota.schoolFirst
+                                programData.yokData2025.quota.schoolFirst
                                   .total > 0 && (
                                   <div className="flex justify-between text-xs bg-blue-50 px-2 py-1 rounded">
                                     <span className="text-blue-700">
@@ -822,15 +822,15 @@ const ComparisonPage = () => {
                                     </span>
                                     <span className="font-medium">
                                       {
-                                        programData.yokData2024.quota
+                                        programData.yokData2025.quota
                                           .schoolFirst.total
                                       }
                                     </span>
                                   </div>
                                 )}
-                              {programData.yokData2024.quota.womenOver34
+                              {programData.yokData2025.quota.womenOver34
                                 .total &&
-                                programData.yokData2024.quota.womenOver34
+                                programData.yokData2025.quota.womenOver34
                                   .total > 0 && (
                                   <div className="flex justify-between text-xs bg-pink-50 px-2 py-1 rounded">
                                     <span className="text-pink-700">
@@ -838,27 +838,27 @@ const ComparisonPage = () => {
                                     </span>
                                     <span className="font-medium">
                                       {
-                                        programData.yokData2024.quota
+                                        programData.yokData2025.quota
                                           .womenOver34.total
                                       }
                                     </span>
                                   </div>
                                 )}
-                              {programData.yokData2024.quota.earthquake.total &&
-                                programData.yokData2024.quota.earthquake.total >
+                              {programData.yokData2025.quota.earthquake.total &&
+                                programData.yokData2025.quota.earthquake.total >
                                   0 && (
                                   <div className="flex justify-between text-xs bg-red-50 px-2 py-1 rounded">
                                     <span className="text-red-700">Deprem</span>
                                     <span className="font-medium">
                                       {
-                                        programData.yokData2024.quota.earthquake
+                                        programData.yokData2025.quota.earthquake
                                           .total
                                       }
                                     </span>
                                   </div>
                                 )}
-                              {programData.yokData2024.quota.veteran.total &&
-                                programData.yokData2024.quota.veteran.total >
+                              {programData.yokData2025.quota.veteran.total &&
+                                programData.yokData2025.quota.veteran.total >
                                   0 && (
                                   <div className="flex justify-between text-xs bg-green-50 px-2 py-1 rounded">
                                     <span className="text-green-700">
@@ -866,7 +866,7 @@ const ComparisonPage = () => {
                                     </span>
                                     <span className="font-medium">
                                       {
-                                        programData.yokData2024.quota.veteran
+                                        programData.yokData2025.quota.veteran
                                           .total
                                       }
                                     </span>
@@ -877,7 +877,7 @@ const ComparisonPage = () => {
                         ) : (
                           <div className="text-center py-4">
                             <p className="text-sm text-gray-500">
-                              Bu program için YÖK 2024 verisi bulunmamaktadır.
+                              Bu program için YÖK 2025 verisi bulunmamaktadır.
                             </p>
                           </div>
                         )}

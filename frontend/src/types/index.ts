@@ -1,4 +1,4 @@
-// Enhanced data types for YÖK 2024 data
+// Enhanced data types for YÖK 2025 data
 export interface QuotaDetails {
   total: number | null;
   placed: number | null;
@@ -6,7 +6,7 @@ export interface QuotaDetails {
   maxScore: number | null;
 }
 
-export interface YokData2024 {
+export interface YokData2025 {
   programCode: string;
   scoreType: string;
   programType: string;
@@ -21,7 +21,7 @@ export interface YokData2024 {
 
 export interface Program {
   name: string;
-  yokData2024?: YokData2024;
+  yokData2025?: YokData2025;
 }
 
 export interface Faculty {

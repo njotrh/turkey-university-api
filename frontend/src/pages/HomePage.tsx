@@ -289,7 +289,7 @@ const HomePage = () => {
               Gelişmiş Arama
             </h3>
             <p className="text-sm sm:text-base text-purple-700 mb-3 sm:mb-4">
-              YÖK 2024 verilerine dayalı filtreleme
+              YÖK 2025 verilerine dayalı filtreleme
             </p>
             <button
               onClick={() => navigate("/enhanced-search")}
