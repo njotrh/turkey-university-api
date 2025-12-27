@@ -9,7 +9,7 @@
 
 > **Türkiye'deki üniversiteler hakkında kapsamlı bilgi sağlayan modern, performanslı ve kullanıcı dostu API sistemi**
 
-Bu proje, Türkiye'deki üniversiteler, fakülteler ve programlar hakkında detaylı bilgi sunan RESTful API servisi ve bu API'yi kullanan modern web uygulamasını içerir. YÖK 2024 verilerini entegre eden gelişmiş arama sistemi ile kullanıcılar, üniversiteleri çoklu kriterlere göre filtreleyebilir ve karşılaştırabilir.
+Bu proje, Türkiye'deki üniversiteler, fakülteler ve programlar hakkında detaylı bilgi sunan RESTful API servisi ve bu API'yi kullanan modern web uygulamasını içerir. YÖK 2025 verilerini entegre eden gelişmiş arama sistemi ile kullanıcılar, üniversiteleri çoklu kriterlere göre filtreleyebilir ve karşılaştırabilir.
 
 ## 📋 İçindekiler
 
@@ -34,7 +34,7 @@ Türkiye Üniversiteleri API Projesi, modern web teknolojileri kullanılarak gel
 
 | Bileşen         | Teknoloji                   | Açıklama                                        |
 | --------------- | --------------------------- | ----------------------------------------------- |
-| **🔙 Backend**  | Express.js + TypeScript     | RESTful API servisi, YÖK 2024 veri entegrasyonu |
+| **🔙 Backend**  | Express.js + TypeScript     | RESTful API servisi, YÖK 2025 veri entegrasyonu |
 | **🎨 Frontend** | React + Vite + Tailwind CSS | Modern, responsive web uygulaması               |
 | **📊 Veri**     | JSON + Enhanced YÖK Data    | 205 üniversite, 2000+ program verisi            |
 | **⚡ Runtime**  | Bun/Node.js                 | Yüksek performanslı JavaScript runtime          |
@@ -43,7 +43,7 @@ Türkiye Üniversiteleri API Projesi, modern web teknolojileri kullanılarak gel
 
 - **📚 Kapsamlı Veri**: 205 üniversite, 1000+ fakülte, 2000+ program
 - **🔍 Gelişmiş Arama**: Çoklu kriter filtreleme sistemi
-- **📊 YÖK 2024 Entegrasyonu**: Güncel puan aralıkları ve kontenjan bilgileri
+- **📊 YÖK 2025 Entegrasyonu**: Güncel puan aralıkları ve kontenjan bilgileri
 - **⚖️ Karşılaştırma Sistemi**: Üniversite ve program karşılaştırması
 - **📱 Responsive Tasarım**: Mobil ve masaüstü uyumlu arayüz
 - **⚡ Yüksek Performans**: Cache sistemi ve optimizasyonlar
@@ -73,7 +73,7 @@ graph TB
         D --> D1[🏫 Üniversite Verileri]
         D --> D2[📚 Fakülte Verileri]
         D --> D3[🎓 Program Verileri]
-        D --> D4[📊 YÖK 2024 Verileri]
+        D --> D4[📊 YÖK 2025 Verileri]
     end
 ```
 
@@ -90,7 +90,7 @@ graph TB
 ### 🔍 Kapsamlı Gelişmiş Arama Sistemi:
 
 - **🎯 Çoklu Kriter Filtreleme**: Üniversite türü, şehir, program türü, puan türü ve fakülte kategorilerine göre filtreleme
-- **📊 YÖK 2024 Veri Entegrasyonu**: Güncel YÖK verilerine dayalı puan aralıkları ve kontenjan bilgileri
+- **📊 YÖK 2025 Veri Entegrasyonu**: Güncel YÖK verilerine dayalı puan aralıkları ve kontenjan bilgileri
 - **🔢 Sayısal Filtreler**: Puan aralığı (min/max) ve kontenjan aralığı (min/max) filtreleme
 - **📝 Akıllı Metin Arama**: Program adlarında fuzzy matching ile gelişmiş arama
 - **🏷️ Fakülte Kategorileri**: Mühendislik, Tıp, Sosyal Bilimler, Fen Bilimleri, Eğitim, Hukuk, İşletme kategorileri
@@ -113,7 +113,7 @@ graph TB
 - **🎨 Yeniden Tasarlanan Gelişmiş Arama Sayfası**: Modern React bileşen mimarisi
 - **🎛️ Etkileşimli Filtre Paneli**: Katlanabilir, görsel durum göstergeleri ile
 - **🏷️ Renkli Filtre Etiketleri**: Her filtre türü için farklı renk kodlaması
-- **📊 Program Kartları Entegrasyonu**: YÖK 2024 verilerini gösteren gelişmiş program kartları
+- **📊 Program Kartları Entegrasyonu**: YÖK 2025 verilerini gösteren gelişmiş program kartları
 - **⚖️ Karşılaştırma Entegrasyonu**: Arama sonuçlarından doğrudan karşılaştırmaya ekleme
 - **🔄 Yükleme Durumları**: Spinner animasyonları ve hata yönetimi
 
@@ -381,7 +381,7 @@ fetch(
           "programs": [
             {
               "name": "Bilgisayar Mühendisliği",
-              "yokData2024": {
+              "yokData2025": {
                 "programCode": "123456",
                 "scoreType": "SAY",
                 "programType": "lisans",
@@ -410,7 +410,7 @@ fetch(
 - **Ana Sayfa**: Üniversite, fakülte ve program arama seçenekleri
 - **🆕 Gelişmiş Arama Sayfası**: Çoklu kriter filtreleme ile kapsamlı arama
 - **Üniversite Listesi**: Sayfalama ve filtreleme ile üniversite görüntüleme
-- **Üniversite Detayları**: Fakülteler, programlar ve YÖK 2024 verileri
+- **Üniversite Detayları**: Fakülteler, programlar ve YÖK 2025 verileri
 - **Arama Sonuçları**: Fakülte ve program arama sonuçları
 - **Karşılaştırma Sayfası**: Üniversite ve program karşılaştırması
 
@@ -456,7 +456,7 @@ fetch(
 ├── 205 Üniversite
 ├── 1,000+ Fakülte
 ├── 2,000+ Program
-└── 50,000+ YÖK 2024 Kayıt
+└── 50,000+ YÖK 2025 Kayıt
 
 🔍 Arama Kapasitesi:
 ├── 81 Şehir Filtresi
